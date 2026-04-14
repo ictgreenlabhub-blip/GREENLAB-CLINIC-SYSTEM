@@ -1,0 +1,59 @@
+function doPost(e) {
+
+  var action = e.parameter.action;
+
+  // 🔥 UPDATE STATUS (from secretary)
+  if (action == "updateStatus") {
+    return updateStatus(e);
+  }
+
+  // 🔥 DEFAULT = SAVE PATIENT (registration)
+  return savePatient(e);
+}
+
+
+// ==============================
+// SAVE PATIENT (FORM)
+// ==============================
+function savePatient(e) {
+
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Main data 1");
+
+  sheet.appendRow([
+    new Date(),
+    e.parameter.email,
+    e.parameter.name,
+    e.parameter.address,
+    e.parameter.birthday,
+    e.parameter.phone,
+    e.parameter.gender,
+    e.parameter.civil,
+    e.parameter.procedure,
+    e.parameter.weight,
+    e.parameter.temperature,
+    e.parameter.bp,
+
+    "PENDING", // Status default
+    "", // Schedule Time
+    "", // Meet Link
+    "NO" // Sent
+  ]);
+
+  return ContentService.createTextOutput("Saved");
+}
+
+
+// ==============================
+// UPDATE STATUS (SECRETARY)
+// ==============================
+function updateStatus(e) {
+
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Main data 1");
+
+  var row = Number(e.parameter.row);
+  var status = e.parameter.status;
+
+  sheet.getRange(row, 13).setValue(status); // column M = Status
+
+  return ContentService.createTextOutput("Updated");
+}
