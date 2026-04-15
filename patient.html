@@ -159,10 +159,11 @@ background:white; padding:25px; border-radius:15px; box-shadow:0 5px 20px rgba(0
 
 <script>
 
-// 👉 API
-const API_URL = "https://script.google.com/macros/s/AKfycbyKc-drGdsGoTBgU3VPTcjAecrE7ltzReWEubKh7Cpw09XuEghc5eKOT8RfSNRmIgDe9w/exec";
 
-// FORM SUBMIT
+// 👉 API
+const API_URL = "https://script.google.com/macros/s/AKfycby1baRbs6wKdkv_v6vIgwHyGEAM2DV3pxwUSI_pUebgrnTgDuXela9H5SK-Uv9grEjq2w/exec";
+
+// ================= FORM SUBMIT =================
 document.getElementById("form").addEventListener("submit", function(e){
     e.preventDefault();
 
@@ -174,30 +175,40 @@ document.getElementById("form").addEventListener("submit", function(e){
     })
     .then(res => res.text())
     .then(data => {
-        document.getElementById("msg").innerHTML = "✅ Submitted successfully!";
-        document.getElementById("form").reset();
+        document.getElementById("formBox").innerHTML = `
+        <div style="text-align:center;padding:50px;">
+          <h1 style="color:#16a395;">THANK YOU!</h1>
+          <p>Your consultation has been submitted.</p>
+        </div>`;
     });
 });
 
-// LOGIN SHOW
+// ================= SHOW LOGIN =================
 function showLogin(){
   document.getElementById("loginBox").style.display = "block";
 }
 
-// LOGIN
+// ================= LOGIN =================
 function login(){
 
-  let email = document.getElementById("email").value;
+  let email = document.getElementById("email").value.trim().toLowerCase();
   let bday = document.getElementById("bday").value;
 
   fetch(API_URL)
   .then(res=>res.json())
   .then(data=>{
 
-    let user = data.find(r => (r[1] && r[1].toString().toLowerCase() ==
-    email.toLowerCase()) && 
-    (r[4] && r[4].toLocaleString().includes(bday))
-  );
+    console.log("DATA:", data); // debug
+
+    let user = data.find(r => {
+
+      let sheetEmail = (r[1] || "").toString().toLowerCase();
+      let sheetBday = (r[4] || "").toString();
+
+      return sheetEmail === email && sheetBday.includes(bday);
+
+    });
+
     if(!user){
       alert("Invalid login");
       return;
@@ -205,42 +216,55 @@ function login(){
 
     localStorage.setItem("userEmail", email);
 
+    // UI
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("profileBox").style.display = "block";
+    document.getElementById("userEmail").innerText = email;
+
     showPatientView();
     loadDashboard(email);
-
-    document.getElementById("loginBox").style.display = "none";
 
   });
 }
 
-// HIDE SIDEBAR
+// ================= HIDE SIDEBAR =================
 function showPatientView(){
   document.querySelector(".sidebar").style.display = "none";
   document.getElementById("formBox").style.display = "none";
 }
 
-// LOAD DASHBOARD
+// ================= LOAD DASHBOARD =================
 function loadDashboard(email){
 
   fetch(API_URL)
   .then(res=>res.json())
   .then(data=>{
 
-    let html = "";
+    let html = `
+    <table class="table table-bordered">
+    <tr>
+      <th>Date</th>
+      <th>Prescription</th>
+      <th>Meet</th>
+    </tr>`;
 
     data.slice(1).forEach(r=>{
 
-      if(r[1] == email){
+      let sheetEmail = (r[1] || "").toString().toLowerCase();
+
+      if(sheetEmail === email){
 
         html += `
-        <div style="background:white;padding:15px;margin-bottom:10px;border-left:5px solid #16a395;">
-          <div>${new Date(r[0]).toLocaleString()}</div>
-          <div>${r[16]||""}</div>
-          <div>${r[13] ? `<a href="${r[13]}" target="_blank">Join Meet</a>` : ""}</div>
-        </div>`;
+        <tr>
+          <td>${new Date(r[0]).toLocaleString()}</td>
+          <td>${r[16] || "-"}</td>
+          <td>${r[13] ? `<a href="${r[13]}" target="_blank">Join</a>` : "-"}</td>
+        </tr>`;
       }
 
     });
+
+    html += "</table>";
 
     document.getElementById("timeline").innerHTML = html;
     document.getElementById("dashboard").style.display = "block";
@@ -248,13 +272,38 @@ function loadDashboard(email){
   });
 }
 
-// AUTO LOGIN
+// ================= PROFILE MENU =================
+function toggleProfile(){
+
+  let menu = document.getElementById("profileMenu");
+
+  menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+// ================= LOGOUT =================
+function logout(){
+
+  localStorage.removeItem("userEmail");
+
+  location.reload();
+
+}
+
+// ================= AUTO LOGIN =================
 window.onload = function(){
+
   let email = localStorage.getItem("userEmail");
+
   if(email){
+
+    document.getElementById("profileBox").style.display = "block";
+    document.getElementById("userEmail").innerText = email;
+
     showPatientView();
     loadDashboard(email);
+
   }
+
 }
 
 </script>
