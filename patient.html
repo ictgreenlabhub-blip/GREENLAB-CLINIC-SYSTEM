@@ -8,379 +8,235 @@
 
 <style>
 body{
-  margin:0;
-  font-family:Arial;
-  background:#f4f6f9;
+    margin:0;
+    font-family:Arial;
+    background:#f4f6f9;
 }
 
-/* SIDEBAR */
-.sidebar{
-  width:250px;
-  height:100vh;
-  position:fixed;
-  background:linear-gradient(180deg,#c4e479,#16a395);
-  padding:25px 15px;
-}
-
-.logo{
-  text-align:center;
-  margin-bottom:80px;
-}
-.logo img{
-  width:120px;
-}
-
-/* CONTENT */
-.content{
-  margin-left:270px;
-  padding:50px;
-}
-
-/* CENTER SCREEN */
+/* CENTER */
 .center-box{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:80vh;
-  gap:40px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:80vh;
+    gap:40px;
 }
 
-/* BIG BUTTONS */
-.big-btn{
-  width:220px;
-  height:150px;
-  border-radius:20px;
-  font-size:20px;
-  font-weight:bold;
-  border:none;
-  color:white;
-  transition:0.3s;
+/* BUTTONS */
+.choice-btn{
+    width:220px;
+    height:120px;
+    border:none;
+    border-radius:20px;
+    color:white;
+    font-size:20px;
+    font-weight:bold;
 }
 
-.login-btn{ background:#16a395; }
-.create-btn{ background:#2e7d32; }
+.login-btn{ background:#17a2b8; }
+.create-btn{ background:#28a745; }
 
-.big-btn:hover{
-  transform:scale(1.05);
-}
-
-/* FORM */
-.form-box{
-  max-width:700px;
-  margin:auto;
-  background:white;
-  padding:30px;
-  border-radius:15px;
-  box-shadow:0 2px 12px rgba(0,0,0,0.1);
-}
-
-/* LOGIN BOX */
-.login-box{
-  max-width:350px;
-  margin:auto;
-  background:white;
-  padding:30px;
-  border-radius:15px;
-  box-shadow:0 2px 12px rgba(0,0,0,0.1);
+/* CARD */
+.card-box{
+    max-width:400px;
+    margin:auto;
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
 }
 </style>
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
-  <div class="logo">
-    <img src="Green-Logo.png">
-  </div>
+<!-- CHOICE -->
+<div id="choiceBox" class="center-box">
+    <button class="choice-btn login-btn" onclick="showLogin()">Login</button>
+    <button class="choice-btn create-btn" onclick="showForm()">+ Create</button>
 </div>
 
-<!-- CONTENT -->
-<div class="content">
+<!-- LOGIN -->
+<div id="loginBox" class="card-box" style="display:none;">
+    <h4>Patient Login</h4>
+    <input id="loginEmail" class="form-control mb-2" placeholder="Email">
+    <input id="loginPass" type="password" class="form-control mb-2" placeholder="Password">
+    <button class="btn btn-success w-100" onclick="login()">Login</button>
+    <p class="mt-2"><a href="#" onclick="back()">← Back</a></p>
+</div>
 
-  <!-- 🔥 CHOICE SCREEN -->
-  <div id="choiceBox" class="center-box">
-    <button class="big-btn login-btn" onclick="showLogin()">Login</button>
-    <button class="big-btn create-btn" onclick="showForm()">+ Create</button>
-  </div>
+<!-- FORM -->
+<div id="formBox" class="card-box" style="display:none;">
+    <h4>Patient Form</h4>
 
-  <!-- 🔐 LOGIN -->
-  <div id="loginBox" style="display:none;">
-    <div class="login-box">
-      <h4 class="mb-3">Patient Login</h4>
+    <form id="form">
+        <input name="name" class="form-control mb-2" placeholder="Full Name" required>
+        <input name="email" class="form-control mb-2" placeholder="Email" required>
+        <input name="phone" class="form-control mb-2" placeholder="Phone">
+        <input name="address" class="form-control mb-2" placeholder="Address">
+        <input name="birthday" type="date" class="form-control mb-2">
 
-      <input id="email" class="form-control mb-2" placeholder="Email">
-      <input id="password" type="password" class="form-control mb-3" placeholder="Password">
-
-      <button class="btn btn-success w-100" onclick="login()">Login</button>
-
-      <button class="btn btn-link w-100 mt-2" onclick="back()">← Back</button>
-    </div>
-  </div>
-
-  <!-- 📝 FORM -->
-  <div id="formBox" style="display:none;">
-    <div class="form-box">
-
-      <h4 class="mb-3">Patient Information</h4>
-
-      <form id="form">
-        <input class="form-control mb-2" name="name" placeholder="Full Name" required>
-        <input class="form-control mb-2" name="email" placeholder="Email">
-        <input class="form-control mb-2" name="phone" placeholder="Phone Number">
-        <input class="form-control mb-2" name="address" placeholder="Address">
-
-        <label>Birthday</label>
-        <input type="date" class="form-control mb-2" name="birthday">
-
-        <label>Gender</label>
-        <select class="form-control mb-2" name="gender">
-          <option>Male</option>
-          <option>Female</option>
+        <select name="gender" class="form-control mb-2">
+            <option>Male</option>
+            <option>Female</option>
         </select>
 
-        <label>Civil Status</label>
-        <select class="form-control mb-2" name="status">
-          <option>Single</option>
-          <option>Married</option>
-          <option>Widowed</option>
-          <option>Child</option>
+        <select name="status" class="form-control mb-2">
+            <option>Single</option>
+            <option>Married</option>
         </select>
 
-        <input class="form-control mb-2" name="weight" placeholder="Weight">
-        <input class="form-control mb-2" name="temperature" placeholder="Temperature">
-        <input class="form-control mb-2" name="bp" placeholder="Blood Pressure">
+        <input name="weight" class="form-control mb-2" placeholder="Weight">
+        <input name="temperature" class="form-control mb-2" placeholder="Temperature">
+        <input name="bp" class="form-control mb-2" placeholder="BP">
 
         <button class="btn btn-success w-100">Submit</button>
-      </form>
+    </form>
 
-      <p id="msg" class="mt-3 text-success"></p>
-
-      <button class="btn btn-link w-100 mt-2" onclick="back()">← Back</button>
-
-    </div>
-  </div>
-
+    <p id="msg"></p>
+    <p class="mt-2"><a href="#" onclick="back()">← Back</a></p>
 </div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" style="display:none; padding:30px;"></div>
 
 <script>
 
 const API_URL = "https://script.google.com/macros/s/AKfycbw-sdPvipu6F0PQ1LTzMRoRxAyt23AhSH8e-a2yYsMq2AhLuzuCXkfGBaX5Ly2Au747Aw/exec";
-
-// 🔥 CACHE STORAGE
 let patientData = [];
 
-/* ================= LOAD DATA ONCE ================= */
+/* LOAD DATA ONCE */
 window.onload = function(){
-
-  // show loading (optional)
-  console.log("Loading data...");
-
-  fetch(API_URL)
-  .then(res=>res.json())
-  .then(data=>{
-    patientData = data;
-    localStorage.setItem("patients", JSON.stringify(data));
-    console.log("Data loaded ✅");
-  })
-  .catch(()=>{
-    // fallback (offline / mabilis)
-    let cache = localStorage.getItem("patients");
-    if(cache){
-      patientData = JSON.parse(cache);
-      console.log("Loaded from cache ⚡");
-    }
-  });
-
+    fetch(API_URL)
+    .then(res=>res.json())
+    .then(data=>{
+        patientData = data;
+        console.log("Data loaded ✅");
+    });
 }
 
-
-/* ================= LOGIN (INSTANT) ================= */
-function login(){
-
-  let email = document.getElementById("loginEmail").value.trim().toLowerCase();
-  let pass = document.getElementById("loginPass").value;
-
-  if(pass !== "1234"){
-    alert("Wrong password ❌");
-    return;
-  }
-
-  if(patientData.length === 0){
-    alert("Data not loaded yet ⏳");
-    return;
-  }
-
-  let found = false;
-
-  patientData.forEach((r,i)=>{
-
-    if(i===0) return;
-
-    let rowEmail = (r[1]||"").toString().trim().toLowerCase();
-
-    // 🔥 EXACT MATCH (NO BUG)
-    if(rowEmail === email){
-      found = true;
-    }
-
-  });
-
-  if(!found){
-    alert("Email not found ❌");
-    return;
-  }
-
-  // ✅ SUCCESS
-  document.getElementById("loginBox").style.display = "none";
-  document.getElementById("dashboard").style.display = "block";
-
-  loadDashboard(email);
-}
-
-
-/* ================= DASHBOARD ================= */
-function loadDashboard(email){
-<div id="dashboard" style="display:none;"></div>
-  email = email.trim().toLowerCase();
-
-  let activeHTML = `
-  <h4>🟢 Active</h4>
-  <table class="table table-bordered">
-  <tr>
-    <th>Timestamp</th>
-    <th>Email</th>
-    <th>Fullname</th>
-    <th>Address</th>
-    <th>Birthday</th>
-    <th>Phone</th>
-    <th>Gender</th>
-    <th>Status</th>
-    <th>Procedure</th>
-    <th>Weight</th>
-    <th>Temp</th>
-    <th>BP</th>
-    <th>Schedule</th>
-    <th>Meet</th>
-    <th>PDF</th>
-  </tr>`;
-
-  let historyHTML = `
-  <h4 class="mt-4">📜 History</h4>
-  <table class="table table-bordered">
-  <tr>
-    <th>Timestamp</th>
-    <th>Email</th>
-    <th>Fullname</th>
-    <th>Address</th>
-    <th>Birthday</th>
-    <th>Phone</th>
-    <th>Gender</th>
-    <th>Status</th>
-    <th>Procedure</th>
-    <th>Weight</th>
-    <th>Temp</th>
-    <th>BP</th>
-    <th>Schedule</th>
-    <th>Meet</th>
-    <th>PDF</th>
-  </tr>`;
-
-  let hasActive = false;
-  let hasHistory = false;
-
-  patientData.forEach((r,i)=>{
-
-    if(i===0) return;
-
-    let rowEmail = (r[1]||"").toString().trim().toLowerCase();
-
-    if(rowEmail !== email) return;
-
-    // 📌 columns mapping (IMPORTANT)
-    let timestamp = r[0] || "-";
-    let emailCol = r[1] || "-";
-    let name = r[2] || "-";
-    let address = r[3] || "-";
-    let bday = r[4] || "-";
-    let phone = r[5] || "-";
-    let gender = r[6] || "-";
-    let civil = r[7] || "-";
-    let procedure = r[8] || "-";
-    let weight = r[9] || "-";
-    let temp = r[10] || "-";
-    let bp = r[11] || "-";
-    let schedule = r[12] ? new Date(r[12]).toLocaleString() : "-";
-    let meet = r[13] ? `<a href="${r[13]}" target="_blank">Join</a>` : "-";
-    let pdf = r[19] ? `<a href="${r[19]}" target="_blank">View</a>` : "-";
-    let status = r[20] || "Pending";
-
-    let rowHTML = `
-    <tr>
-      <td>${timestamp}</td>
-      <td>${emailCol}</td>
-      <td>${name}</td>
-      <td>${address}</td>
-      <td>${bday}</td>
-      <td>${phone}</td>
-      <td>${gender}</td>
-      <td>${civil}</td>
-      <td>${procedure}</td>
-      <td>${weight}</td>
-      <td>${temp}</td>
-      <td>${bp}</td>
-      <td>${schedule}</td>
-      <td>${meet}</td>
-      <td>${pdf}</td>
-    </tr>`;
-
-    // 🔥 LOGIC
-    if(pdf !== "-" || status === "DONE"){
-      historyHTML += rowHTML;
-      hasHistory = true;
-    } else {
-      activeHTML += rowHTML;
-      hasActive = true;
-    }
-
-  });
-
-  activeHTML += "</table>";
-  historyHTML += "</table>";
-
-  if(!hasActive){
-    activeHTML = "<h4>🟢 Active</h4><p>No active records</p>";
-  }
-
-  if(!hasHistory){
-    historyHTML = "<h4>📜 History</h4><p>No history yet</p>";
-  }
-
-  document.getElementById("dashboard").innerHTML =
-    activeHTML + historyHTML;
-}
-</script>
-<script>
-
+/* NAVIGATION */
 function showLogin(){
-  console.log("Login clicked"); // debug
-
-  document.getElementById("choiceBox").style.display = "none";
-  document.getElementById("loginBox").style.display = "block";
+    document.getElementById("choiceBox").style.display="none";
+    document.getElementById("loginBox").style.display="block";
 }
 
 function showForm(){
-  console.log("Create clicked"); // debug
-
-  document.getElementById("choiceBox").style.display = "none";
-  document.getElementById("formBox").style.display = "block";
+    document.getElementById("choiceBox").style.display="none";
+    document.getElementById("formBox").style.display="block";
 }
 
 function back(){
-  document.getElementById("choiceBox").style.display = "flex";
-  document.getElementById("loginBox").style.display = "none";
-  document.getElementById("formBox").style.display = "none";
+    document.getElementById("choiceBox").style.display="flex";
+    document.getElementById("loginBox").style.display="none";
+    document.getElementById("formBox").style.display="none";
 }
+
+/* LOGIN */
+function login(){
+
+    let email = document.getElementById("loginEmail").value.trim().toLowerCase();
+    let pass = document.getElementById("loginPass").value;
+
+    if(pass !== "1234"){
+        alert("Wrong password ❌");
+        return;
+    }
+
+    if(patientData.length === 0){
+        alert("Loading data ⏳");
+        return;
+    }
+
+    let found = false;
+
+    patientData.forEach((r,i)=>{
+        if(i===0) return;
+
+        let rowEmail = (r[1]||"").toString().trim().toLowerCase();
+
+        if(rowEmail === email){
+            found = true;
+        }
+    });
+
+    if(!found){
+        alert("Email not found ❌");
+        return;
+    }
+
+    document.getElementById("loginBox").style.display="none";
+    document.getElementById("dashboard").style.display="block";
+
+    loadDashboard(email);
+}
+
+/* DASHBOARD */
+function loadDashboard(email){
+
+    let html = `
+    <h4>Patient Records</h4>
+    <table class="table table-bordered">
+    <tr>
+      <th>Timestamp</th>
+      <th>Email</th>
+      <th>Name</th>
+      <th>Procedure</th>
+      <th>Weight</th>
+      <th>Temp</th>
+      <th>BP</th>
+      <th>Schedule</th>
+      <th>Meet</th>
+      <th>PDF</th>
+    </tr>`;
+
+    patientData.forEach((r,i)=>{
+
+        if(i===0) return;
+
+        let rowEmail = (r[1]||"").toString().trim().toLowerCase();
+
+        if(rowEmail !== email) return;
+
+        let schedule = r[12] ? new Date(r[12]).toLocaleString() : "-";
+        let meet = r[13] ? `<a href="${r[13]}" target="_blank">Join</a>` : "-";
+        let pdf = r[19] ? `<a href="${r[19]}" target="_blank">View</a>` : "-";
+
+        html += `
+        <tr>
+          <td>${r[0]}</td>
+          <td>${r[1]}</td>
+          <td>${r[2]}</td>
+          <td>${r[8]}</td>
+          <td>${r[9]}</td>
+          <td>${r[10]}</td>
+          <td>${r[11]}</td>
+          <td>${schedule}</td>
+          <td>${meet}</td>
+          <td>${pdf}</td>
+        </tr>`;
+    });
+
+    html += "</table>";
+
+    document.getElementById("dashboard").innerHTML = html;
+}
+
+/* SUBMIT FORM */
+document.getElementById("form").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    let formData = new FormData(this);
+
+    fetch(API_URL,{
+        method:"POST",
+        body:formData
+    })
+    .then(()=> {
+        document.getElementById("msg").innerHTML="✅ Submitted!";
+        document.getElementById("form").reset();
+    });
+});
 
 </script>
 
