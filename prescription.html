@@ -201,28 +201,25 @@ select{
 /* 🔥 👉 DITO MO ILALAGAY APPS SCRIPT URL */
 const API_URL = "https://script.google.com/macros/s/AKfycbxFOQixOtBwLDwCoaxFAhwHorFuQeLNxuvXUtmlP5N-8GMR3tfDqNDMwjmChKSU7_TScg/exec";
 
-/* GET ROW FROM URL */
+/* GET ROW */
 const params = new URLSearchParams(window.location.search);
 const row = params.get("row");
 
-/* ================= AUTO FILL ================= */
+/* AUTO FILL */
 fetch(API_URL)
 .then(res => res.json())
 .then(data => {
 
   let r = data[row - 1];
 
-  // BASIC INFO
   document.getElementById("name").innerText = r[2] || "";
   document.getElementById("age").innerText = computeAge(r[4]);
   document.getElementById("sex").innerText = r[6] || "";
   document.getElementById("address").innerText = r[3] || "";
 
-  // DATE TODAY
   document.getElementById("date").innerText =
     new Date().toLocaleDateString("en-PH");
 
-  // EXISTING VALUES (kung may laman na)
   document.getElementById("procedure").value = r[8] || "";
   document.getElementById("prescription").value = r[16] || "";
   document.getElementById("followup").value = r[17] || "";
@@ -230,8 +227,7 @@ fetch(API_URL)
 
 });
 
-
-/* ================= AGE ================= */
+/* AGE */
 function computeAge(bday){
   if(!bday) return "";
   let d = new Date(bday);
@@ -239,14 +235,13 @@ function computeAge(bday){
   return new Date().getFullYear() - d.getFullYear();
 }
 
-
-/* ================= SAVE ================= */
+/* SAVE + PDF */
 function savePrescription(){
 
   fetch(API_URL,{
     method:"POST",
     body: JSON.stringify({
-      action:"doctorSave",
+      action:"saveWithPDF",
       row: row,
       procedure: document.getElementById("procedure").value,
       prescription: document.getElementById("prescription").value,
@@ -254,15 +249,7 @@ function savePrescription(){
       referred: document.getElementById("referred").value
     })
   })
-  .then(res => res.text())
-  .then(res => {
-    alert("Saved successfully!");
-    console.log(res);
-  })
-  .catch(err => {
-    alert("Error saving");
-    console.error(err);
-  });
+  .then(()=>alert("Saved + PDF created!"));
 
 }
 
