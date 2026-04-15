@@ -167,24 +167,35 @@ body{
 
 const API_URL = "https://script.google.com/macros/s/AKfycbw-sdPvipu6F0PQ1LTzMRoRxAyt23AhSH8e-a2yYsMq2AhLuzuCXkfGBaX5Ly2Au747Aw/exec";
 
-/* SWITCH */
-function showLogin(){
-  document.getElementById("choiceBox").style.display="none";
-  document.getElementById("loginBox").style.display="block";
+// 🔥 CACHE STORAGE
+let patientData = [];
+
+/* ================= LOAD DATA ONCE ================= */
+window.onload = function(){
+
+  // show loading (optional)
+  console.log("Loading data...");
+
+  fetch(API_URL)
+  .then(res=>res.json())
+  .then(data=>{
+    patientData = data;
+    localStorage.setItem("patients", JSON.stringify(data));
+    console.log("Data loaded ✅");
+  })
+  .catch(()=>{
+    // fallback (offline / mabilis)
+    let cache = localStorage.getItem("patients");
+    if(cache){
+      patientData = JSON.parse(cache);
+      console.log("Loaded from cache ⚡");
+    }
+  });
+
 }
 
-function showForm(){
-  document.getElementById("choiceBox").style.display="none";
-  document.getElementById("formBox").style.display="block";
-}
 
-function back(){
-  document.getElementById("choiceBox").style.display="flex";
-  document.getElementById("loginBox").style.display="none";
-  document.getElementById("formBox").style.display="none";
-}
-
-/* LOGIN */
+/* ================= LOGIN (INSTANT) ================= */
 function login(){
 
   let email = document.getElementById("email").value.trim().toLowerCase();
@@ -195,43 +206,72 @@ function login(){
     return;
   }
 
-  fetch(API_URL)
-  .then(res=>res.json())
-  .then(data=>{
-
-    let found = data.some((r,i)=>{
-      if(i===0) return false;
-      return (r[1]||"").toLowerCase() === email;
-    });
-
-    if(!found){
-      alert("Email not found ❌");
-      return;
-    }
-
-    alert("Login success ✅");
-
+  // 🔥 NO FETCH HERE (instant)
+  let found = patientData.some((r,i)=>{
+    if(i===0) return false;
+    return (r[1]||"").toLowerCase() === email;
   });
 
+  if(!found){
+    alert("Email not found ❌");
+    return;
+  }
+
+  // ✅ SUCCESS
+  localStorage.setItem("email", email);
+
+  // REMOVE ALERT (para hindi pangit)
+  // alert("Login success");
+
+  // 🔥 DIRECT DASHBOARD
+  document.getElementById("choiceBox").style.display="none";
+  document.getElementById("loginBox").style.display="none";
+  document.getElementById("formBox").style.display="none";
+
+  document.getElementById("dashboard").style.display="block";
+
+  loadDashboard(email);
 }
 
-/* SUBMIT FORM */
-document.getElementById("form").addEventListener("submit", function(e){
-  e.preventDefault();
 
-  let formData = new FormData(this);
+/* ================= DASHBOARD ================= */
+function loadDashboard(email){
 
-  fetch(API_URL,{
-    method:"POST",
-    body:formData
-  })
-  .then(res=>res.text())
-  .then(()=>{
-    document.getElementById("formBox").innerHTML =
-      "<h2 style='text-align:center'>✅ Thank you!</h2>";
+  let html = `
+  <h4>Welcome</h4>
+  <table class="table table-bordered">
+  <tr>
+    <th>Date</th>
+    <th>Meet</th>
+    <th>Status</th>
+  </tr>`;
+
+  patientData.forEach((r,i)=>{
+
+    if(i===0) return;
+
+    let rowEmail = (r[1]||"").toLowerCase();
+
+    if(rowEmail === email){
+
+      let date = r[0] ? new Date(r[0]).toLocaleString() : "-";
+      let meet = r[13] ? `<a href="${r[13]}" target="_blank">Join</a>` : "-";
+      let status = r[20] || "Pending";
+
+      html += `
+      <tr>
+        <td>${date}</td>
+        <td>${meet}</td>
+        <td>${status}</td>
+      </tr>`;
+    }
+
   });
 
-});
+  html += "</table>";
+
+  document.getElementById("dashboard").innerHTML = html;
+}
 
 </script>
 
