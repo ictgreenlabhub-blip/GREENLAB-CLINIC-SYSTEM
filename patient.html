@@ -237,42 +237,123 @@ function login(){
 /* ================= DASHBOARD ================= */
 function loadDashboard(email){
 
-  let html = `
-  <h4>Welcome</h4>
+  email = email.trim().toLowerCase();
+
+  let activeHTML = `
+  <h4>🟢 Active</h4>
   <table class="table table-bordered">
   <tr>
-    <th>Date</th>
-    <th>Meet</th>
+    <th>Timestamp</th>
+    <th>Email</th>
+    <th>Fullname</th>
+    <th>Address</th>
+    <th>Birthday</th>
+    <th>Phone</th>
+    <th>Gender</th>
     <th>Status</th>
+    <th>Procedure</th>
+    <th>Weight</th>
+    <th>Temp</th>
+    <th>BP</th>
+    <th>Schedule</th>
+    <th>Meet</th>
+    <th>PDF</th>
   </tr>`;
+
+  let historyHTML = `
+  <h4 class="mt-4">📜 History</h4>
+  <table class="table table-bordered">
+  <tr>
+    <th>Timestamp</th>
+    <th>Email</th>
+    <th>Fullname</th>
+    <th>Address</th>
+    <th>Birthday</th>
+    <th>Phone</th>
+    <th>Gender</th>
+    <th>Status</th>
+    <th>Procedure</th>
+    <th>Weight</th>
+    <th>Temp</th>
+    <th>BP</th>
+    <th>Schedule</th>
+    <th>Meet</th>
+    <th>PDF</th>
+  </tr>`;
+
+  let hasActive = false;
+  let hasHistory = false;
 
   patientData.forEach((r,i)=>{
 
     if(i===0) return;
 
-    let rowEmail = (r[1]||"").toLowerCase();
+    let rowEmail = (r[1]||"").toString().trim().toLowerCase();
 
-    if(rowEmail === email){
+    if(rowEmail !== email) return;
 
-      let date = r[0] ? new Date(r[0]).toLocaleString() : "-";
-      let meet = r[13] ? `<a href="${r[13]}" target="_blank">Join</a>` : "-";
-      let status = r[20] || "Pending";
+    // 📌 columns mapping (IMPORTANT)
+    let timestamp = r[0] || "-";
+    let emailCol = r[1] || "-";
+    let name = r[2] || "-";
+    let address = r[3] || "-";
+    let bday = r[4] || "-";
+    let phone = r[5] || "-";
+    let gender = r[6] || "-";
+    let civil = r[7] || "-";
+    let procedure = r[8] || "-";
+    let weight = r[9] || "-";
+    let temp = r[10] || "-";
+    let bp = r[11] || "-";
+    let schedule = r[12] ? new Date(r[12]).toLocaleString() : "-";
+    let meet = r[13] ? `<a href="${r[13]}" target="_blank">Join</a>` : "-";
+    let pdf = r[19] ? `<a href="${r[19]}" target="_blank">View</a>` : "-";
+    let status = r[20] || "Pending";
 
-      html += `
-      <tr>
-        <td>${date}</td>
-        <td>${meet}</td>
-        <td>${status}</td>
-      </tr>`;
+    let rowHTML = `
+    <tr>
+      <td>${timestamp}</td>
+      <td>${emailCol}</td>
+      <td>${name}</td>
+      <td>${address}</td>
+      <td>${bday}</td>
+      <td>${phone}</td>
+      <td>${gender}</td>
+      <td>${civil}</td>
+      <td>${procedure}</td>
+      <td>${weight}</td>
+      <td>${temp}</td>
+      <td>${bp}</td>
+      <td>${schedule}</td>
+      <td>${meet}</td>
+      <td>${pdf}</td>
+    </tr>`;
+
+    // 🔥 LOGIC
+    if(pdf !== "-" || status === "DONE"){
+      historyHTML += rowHTML;
+      hasHistory = true;
+    } else {
+      activeHTML += rowHTML;
+      hasActive = true;
     }
 
   });
 
-  html += "</table>";
+  activeHTML += "</table>";
+  historyHTML += "</table>";
 
-  document.getElementById("dashboard").innerHTML = html;
+  if(!hasActive){
+    activeHTML = "<h4>🟢 Active</h4><p>No active records</p>";
+  }
+
+  if(!hasHistory){
+    historyHTML = "<h4>📜 History</h4><p>No history yet</p>";
+  }
+
+  document.getElementById("dashboard").innerHTML =
+    activeHTML + historyHTML;
 }
-
 </script>
 <script>
 
