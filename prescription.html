@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <title>Prescription</title>
 
 <style>
@@ -11,116 +12,109 @@ body{
 }
 
 .paper{
-  width: 8.5in;
-  height: 11in;
+  width:8.5in;
+  height:11in;
   margin:auto;
   background:white;
-  padding:60px 80px; /* 🔥 balanced spacing */
-  position:relative;
+  padding:40px 60px;
   box-sizing:border-box;
+  position:relative;
 }
 
-/* 🔥 CENTERED HEADER (FIXED) */
 .header{
   display:flex;
+  justify-content:center;
   align-items:center;
   gap:20px;
-
-  width:fit-content;
-  margin:auto;
 }
 
-/* LOGO */
 .logo{
-  width:110px;
+  width:120px;
 }
 
-/* HEADER TEXT */
 .header-text{
-  font-size:13px;
+  font-size:14px;
   line-height:1.4;
 }
 
 .clinic-title{
+  font-size:22px;
   font-weight:bold;
-  font-size:20px;
   color:#2e7d32;
 }
 
-/* ROW */
 .row{
-  margin-top:25px;
-  font-size:15px;
+  margin-top:20px;
+  font-size:16px;
 }
 
-/* LINE */
 .line{
   border-bottom:1px solid black;
   display:inline-block;
-  min-width:150px;
 }
 
-/* RX WATERMARK FIX */
+.line-name{ min-width:220px; }
+.line-age{ min-width:70px; }
+.line-sex{ min-width:80px; }
+.line-date{ min-width:140px; }
+.line-address{ min-width:300px; }
+
 .rx{
-  font-size:120px;
-  color:#cfcfcf;
   position:absolute;
-  left:80px;
-  top:320px;
+  top:300px;
+  left:60px;
+  font-size:140px;
+  color:#ccc;
   opacity:0.2;
-  z-index:0;
 }
 
-/* SECTION */
 .section{
-  margin-top:30px;
-  font-size:15px;
-  position:relative;
-  z-index:1;
+  margin-top:25px;
+  font-size:16px;
 }
 
-/* INPUT */
 .inline{
   border:none;
   border-bottom:1px solid black;
   outline:none;
-  font-size:15px;
-  width:250px;
+  font-size:16px;
+  background:transparent;
 }
 
-/* TEXTAREA FIX */
 textarea{
   width:100%;
   border:none;
   outline:none;
-  font-size:15px;
+  font-size:16px;
   resize:none;
   background:transparent;
-  z-index:2;
-  position:relative;
 }
 
-/* SELECT */
 select{
   border:none;
   border-bottom:1px solid black;
+  font-size:16px;
   outline:none;
-  font-size:15px;
-  background:transparent;
 }
 
-/* FOOTER */
 .footer{
   position:absolute;
-  bottom:60px;
-  right:80px;
+  bottom:50px;
+  right:60px;
   text-align:center;
-  font-size:13px;
 }
 
 .signature{
-  width:140px;
-  opacity:0.7;
+  width:150px;
+}
+
+.btn{
+  margin-top:30px;
+  padding:10px 20px;
+  background:#2e7d32;
+  color:white;
+  border:none;
+  cursor:pointer;
 }
 
 </style>
@@ -130,112 +124,121 @@ select{
 
 <div class="paper">
 
-<!-- HEADER -->
-<div class="header">
-  <img src="Greenlab-logo.png" class="logo">
-
-  <div class="header-text">
-    <div class="clinic-title">
-      GREEN LAB CLINIC AND WELLNESS HUB
+  <!-- HEADER -->
+  <div class="header">
+    <img src="Greenlab-logo.png" class="logo">
+    <div class="header-text">
+      <div class="clinic-title">GREEN LAB CLINIC AND WELLNESS HUB</div>
+      OWNED AND OPERATED BY TGM GREEN MEDICAL CORP.<br>
+      Purok 4, Apokon Tagum City, Davao del Norte<br>
+      Globe: 0905-240-6557 | Tel: 084-655-0783<br>
+      Email Address: greenlabhub@gmail.com
     </div>
-    OWNED AND OPERATED BY TGM GREEN MEDICAL CORP.<br>
-    Purok 4, Apokon Tagum City, Davao del Norte<br>
-    Globe: 0905-240-6557 | Tel: 084-655-0783<br>
-    Email Address: greenlabhub@gmail.com
   </div>
-</div>
 
-<!-- INFO -->
-<div class="row">
-  Patient Name: <span class="line" id="name"></span>
-  &nbsp;&nbsp;&nbsp;
-  Age: <span class="line" id="age"></span>
-  &nbsp;&nbsp;&nbsp;
-  Sex: <span class="line" id="sex"></span>
-</div>
+  <!-- INFO -->
+  <div class="row">
+    Patient Name: <span class="line line-name" id="name"></span>
+    &nbsp;&nbsp;
+    Age: <span class="line line-age" id="age"></span>
+    &nbsp;&nbsp;
+    Sex: <span class="line line-sex" id="sex"></span>
+  </div>
 
-<div class="row">
-  Address: <span class="line" style="min-width:320px" id="address"></span>
-  &nbsp;&nbsp;&nbsp;
-  Date: <span class="line" id="date"></span>
-</div>
+  <div class="row">
+    Address: <span class="line line-address" id="address"></span>
+    &nbsp;&nbsp;
+    Date: <span class="line line-date" id="date"></span>
+  </div>
 
-<div class="rx">Rx</div>
+  <div class="rx">Rx</div>
 
-<!-- PROCEDURE -->
-<div class="section">
-  Procedure:
-  <select id="procedure">
-    <option value="">Select</option>
-    <option>X-RAY</option>
-    <option>LABORATORY</option>
-    <option>ULTRASOUND</option>
-    <option>ECG</option>
-  </select>
-</div>
+  <!-- PROCEDURE -->
+  <div class="section">
+    Procedure:
+    <select id="procedure">
+      <option>Select</option>
+      <option>X-RAY</option>
+      <option>LABORATORY</option>
+      <option>ULTRASOUND</option>
+      <option>ECG</option>
+    </select>
+  </div>
 
-<!-- PRESCRIPTION -->
-<div class="section">
-  Prescription:
-  <textarea id="prescription" rows="5" placeholder="Type here..."></textarea>
-</div>
+  <!-- PRESCRIPTION -->
+  <div class="section">
+    Prescription:<br>
+    <textarea id="prescription" rows="6"></textarea>
+  </div>
 
-<!-- REFERRED -->
-<div class="section">
-  Referred by:
-  <input id="referred" class="inline">
-</div>
+  <!-- REFERRED -->
+  <div class="section">
+    Referred by:
+    <input type="text" id="referred" class="inline" style="width:250px;">
+  </div>
 
-<!-- FOLLOW UP -->
-<div class="section">
-  Follow up check-up:
-  <input id="followup" class="inline">
-</div>
+  <!-- FOLLOW UP -->
+  <div class="section">
+    Follow up check-up:
+    <input type="text" id="followup" class="inline" style="width:250px;">
+  </div>
 
-<!-- FOOTER -->
-<div class="footer">
-  <img src="signature.png" class="signature"><br>
-  Dr. AYA DANIKA A. ALTERADO MD<br>
-  LIC NO: 0142226<br>
-  PTR NO: 2165087
-</div>
+  <!-- BUTTON -->
+  <button class="btn" onclick="savePrescription()">Save</button>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <img src="sign.png" class="signature"><br>
+    Dr. AYA DANIKA A. ALTERADO MD<br>
+    LIC NO: 0142226<br>
+    PTR NO: 2165087
+  </div>
 
 </div>
 
 <script>
 
+/* 🔥 👉 DITO MO ILALAGAY APPS SCRIPT URL */
 const API_URL = "https://script.google.com/macros/s/AKfycbxFOQixOtBwLDwCoaxFAhwHorFuQeLNxuvXUtmlP5N-8GMR3tfDqNDMwjmChKSU7_TScg/exec";
-const row = new URLSearchParams(location.search).get("row");
 
-fetch(API_URL)
-.then(res=>res.json())
-.then(data=>{
-  let r = data[row-1];
+/* AUTO LOAD DATA */
+const params = new URLSearchParams(window.location.search);
 
-  document.getElementById("name").innerText = r[2];
-  document.getElementById("age").innerText = computeAge(r[4]);
-  document.getElementById("sex").innerText = r[6];
-  document.getElementById("address").innerText = r[3];
-  document.getElementById("date").innerText = formatDate(new Date());
+document.getElementById("name").innerText = params.get("name") || "";
+document.getElementById("age").innerText = params.get("age") || "";
+document.getElementById("sex").innerText = params.get("sex") || "";
+document.getElementById("address").innerText = params.get("address") || "";
 
-  document.getElementById("procedure").value = r[8] || "";
-  document.getElementById("prescription").value = r[16] || "";
-  document.getElementById("followup").value = r[17] || "";
-  document.getElementById("referred").value = r[18] || "";
-});
+/* DATE */
+document.getElementById("date").innerText = new Date().toLocaleDateString();
 
-function computeAge(b){
-  if(!b) return "";
-  let d=new Date(b);
-  return new Date().getFullYear()-d.getFullYear();
-}
+/* SAVE FUNCTION */
+function savePrescription(){
 
-function formatDate(d){
-  return d.toLocaleDateString("en-PH",{
-    year:"numeric",
-    month:"short",
-    day:"numeric"
+  const data = {
+    name: document.getElementById("name").innerText,
+    age: document.getElementById("age").innerText,
+    sex: document.getElementById("sex").innerText,
+    address: document.getElementById("address").innerText,
+    procedure: document.getElementById("procedure").value,
+    prescription: document.getElementById("prescription").value,
+    referred: document.getElementById("referred").value,
+    followup: document.getElementById("followup").value
+  };
+
+  fetch(API_URL,{
+    method:"POST",
+    body: JSON.stringify({
+      action:"savePrescription",
+      data:data
+    })
+  })
+  .then(res=>res.text())
+  .then(res=>{
+    alert("Saved successfully!");
+    console.log(res);
   });
+
 }
 
 </script>
