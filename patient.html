@@ -198,18 +198,32 @@ window.onload = function(){
 /* ================= LOGIN (INSTANT) ================= */
 function login(){
 
-  let email = document.getElementById("email").value.trim().toLowerCase();
-  let password = document.getElementById("password").value;
+  let email = document.getElementById("loginEmail").value.trim().toLowerCase();
+  let pass = document.getElementById("loginPass").value;
 
-  if(password !== "1234"){
+  if(pass !== "1234"){
     alert("Wrong password ❌");
     return;
   }
 
-  // 🔥 NO FETCH HERE (instant)
-  let found = patientData.some((r,i)=>{
-    if(i===0) return false;
-    return (r[1]||"").toLowerCase() === email;
+  if(patientData.length === 0){
+    alert("Data not loaded yet ⏳");
+    return;
+  }
+
+  let found = false;
+
+  patientData.forEach((r,i)=>{
+
+    if(i===0) return;
+
+    let rowEmail = (r[1]||"").toString().trim().toLowerCase();
+
+    // 🔥 EXACT MATCH (NO BUG)
+    if(rowEmail === email){
+      found = true;
+    }
+
   });
 
   if(!found){
@@ -218,17 +232,8 @@ function login(){
   }
 
   // ✅ SUCCESS
-  localStorage.setItem("email", email);
-
-  // REMOVE ALERT (para hindi pangit)
-  // alert("Login success");
-
-  // 🔥 DIRECT DASHBOARD
-  document.getElementById("choiceBox").style.display="none";
-  document.getElementById("loginBox").style.display="none";
-  document.getElementById("formBox").style.display="none";
-
-  document.getElementById("dashboard").style.display="block";
+  document.getElementById("loginBox").style.display = "none";
+  document.getElementById("dashboard").style.display = "block";
 
   loadDashboard(email);
 }
@@ -236,7 +241,7 @@ function login(){
 
 /* ================= DASHBOARD ================= */
 function loadDashboard(email){
-
+<div id="dashboard" style="display:none;"></div>
   email = email.trim().toLowerCase();
 
   let activeHTML = `
