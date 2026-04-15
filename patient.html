@@ -393,17 +393,32 @@ button, .btn {
 const API_URL = "https://script.google.com/macros/s/AKfycbw-sdPvipu6F0PQ1LTzMRoRxAyt23AhSH8e-a2yYsMq2AhLuzuCXkfGBaX5Ly2Au747Aw/exec";
 let patientData = [];
 
-/* LOAD DATA */
+/* LOAD + CHECK LOGIN */
 window.onload = function(){
     fetch(API_URL)
     .then(res=>res.json())
     .then(data=>{
         patientData = data;
         console.log("loaded");
+
+        let user = localStorage.getItem("user");
+
+        if(user){
+            showDashboard(user);
+        } else {
+            showChoice();
+        }
     });
 }
 
 /* NAVIGATION */
+function hideAll(){
+    document.getElementById("choiceBox").style.display="none";
+    document.getElementById("loginBox").style.display="none";
+    document.getElementById("formBox").style.display="none";
+    document.getElementById("dashboard").style.display="none";
+}
+
 function showLogin(){
     hideAll();
     document.getElementById("loginBox").style.display="block";
@@ -414,60 +429,30 @@ function showForm(){
     document.getElementById("formBox").style.display="block";
 }
 
-function back(){
+function showChoice(){
     hideAll();
     document.getElementById("choiceBox").style.display="flex";
+    document.querySelector(".sidebar").style.display="none";
 }
 
-function hideAll(){
-    document.getElementById("choiceBox").style.display="none";
-    document.getElementById("loginBox").style.display="none";
-    document.getElementById("formBox").style.display="none";
-    document.getElementById("dashboard").style.display="none";
-}
 function showDashboard(email){
-    document.getElementById("choiceBox").style.display = "none";
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("formBox").style.display = "none";
-
-    document.getElementById("dashboardBox").style.display = "block";
-    document.querySelector(".sidebar").style.display = "block";
+    hideAll();
+    document.getElementById("dashboard").style.display="block";
+    document.querySelector(".sidebar").style.display="block";
 
     loadDashboard(email);
 }
 
-function showChoice(){
-    document.getElementById("choiceBox").style.display = "flex";
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("formBox").style.display = "none";
-
-    document.getElementById("dashboardBox").style.display = "none";
-    document.querySelector(".sidebar").style.display = "none";
-}
-
 /* LOGIN */
 function loginUser(){
-    let email = document.getElementById("loginEmail").value;
+    let email = document.getElementById("loginEmail").value.toLowerCase();
     let pass = document.getElementById("loginPass").value;
 
-    if(pass === "1234"){
-        localStorage.setItem("user", email); // SAVE LOGIN
-
-        showDashboard(email);
-    } else {
+    if(pass !== "1234"){
         alert("Wrong password");
+        return;
     }
-}
-// CHECK LOGIN STATUS PAG LOAD
-window.onload = function(){
-    let user = localStorage.getItem("user");
 
-    if(user){
-        showDashboard(user);
-    } else {
-        showChoice();
-    }
-}
     let found = false;
 
     patientData.forEach((r,i)=>{
@@ -483,122 +468,51 @@ window.onload = function(){
     if(!found){
         alert("Email not found");
         return;
+    }
+
+    localStorage.setItem("user", email);
+    showDashboard(email);
 }
-
-    loadDashboard(email);
-
-
 
 /* DASHBOARD */
 function loadDashboard(email){
 
-    hideAll();
-    document.getElementById("dashboard").style.display="block";
     document.getElementById("pEmail").innerText = email;
 
-// kunin first record
-for(let i=1;i<patientData.length;i++){
-    let r = patientData[i];
-    if((r[1]||"").toLowerCase() === email){
-
-        document.getElementById("pName").innerText = r[2];
-        document.getElementById("pAddress").innerText = r[3];
-        document.getElementById("pBday").innerText = new Date(r[4]).toLocaleDateString();
-        document.getElementById("pPhone").innerText = r[5];
-
-        break;
-    }
-}
-
-    // ✅ FORMAT FUNCTIONS
     let formatDate = (d) => {
         if(!d) return "-";
-        return new Date(d).toLocaleDateString("en-PH", {
-            year: "numeric",
-            month: "short",
-            day: "numeric"
-        });
+        return new Date(d).toLocaleDateString("en-PH");
     };
 
     let formatDateTime = (d) => {
         if(!d) return "-";
-        return new Date(d).toLocaleString("en-PH", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit"
-        });
+        return new Date(d).toLocaleString("en-PH");
     };
 
-    // ================= ACTIVE TABLE =================
-    let activeHTML = `
-    <h4>Active</h4>
-    <div class="table-box">
-    <table class="table table-bordered table-sm">
-    <tr>
-        <th>Timestamp</th>
-        <th>Email</th>
-        <th>Name</th>
-        <th>Address</th>
-        <th>Birthday</th>
-        <th>Phone</th>
-        <th>Gender</th>
-        <th>Status</th>
-        <th>Procedure</th>
-        <th>Weight</th>
-        <th>Temp</th>
-        <th>BP</th>
-        <th>Schedule</th>
-        <th>Meet</th>
-        <th>PDF</th>
-    </tr>`;
+    let activeHTML = `<h4>Active</h4><div class="table-box"><table class="table table-sm table-bordered"><tr>
+    <th>Timestamp</th><th>Email</th><th>Name</th><th>Address</th><th>Birthday</th>
+    <th>Phone</th><th>Gender</th><th>Status</th><th>Procedure</th>
+    <th>Weight</th><th>Temp</th><th>BP</th><th>Schedule</th><th>Meet</th><th>PDF</th></tr>`;
 
-    // ================= HISTORY TABLE =================
-    let historyHTML = `
-    <h4 class="mt-5">History</h4>
-    <div class="table-box">
-    <table class="table table-bordered table-sm">
-    <tr>
-        <th>Timestamp</th>
-        <th>Email</th>
-        <th>Name</th>
-        <th>Address</th>
-        <th>Birthday</th>
-        <th>Phone</th>
-        <th>Gender</th>
-        <th>Status</th>
-        <th>Procedure</th>
-        <th>Weight</th>
-        <th>Temp</th>
-        <th>BP</th>
-        <th>Schedule</th>
-        <th>Meet</th>
-        <th>PDF</th>
-    </tr>`;
+    let historyHTML = `<h4 class="mt-4">History</h4><div class="table-box"><table class="table table-sm table-bordered"><tr>
+    <th>Timestamp</th><th>Email</th><th>Name</th><th>Address</th><th>Birthday</th>
+    <th>Phone</th><th>Gender</th><th>Status</th><th>Procedure</th>
+    <th>Weight</th><th>Temp</th><th>BP</th><th>Schedule</th><th>Meet</th><th>PDF</th></tr>`;
 
-    // ================= LOOP =================
     patientData.forEach((r,i)=>{
 
         if(i===0) return;
 
-        let rowEmail = (r[1]||"").toString().trim().toLowerCase();
+        let rowEmail = (r[1]||"").toLowerCase();
         if(rowEmail !== email) return;
-
-        let timestamp = formatDateTime(r[0]);
-        let bday = formatDate(r[4]);
-        let schedule = formatDateTime(r[12]);
-
-        let meet = r[13] ? `<a href="${r[13]}" target="_blank">Join</a>` : "-";
-        let pdf = r[19] ? `<a href="${r[19]}" target="_blank">View</a>` : "-";
 
         let rowHTML = `
         <tr>
-            <td>${timestamp}</td>
+            <td>${formatDateTime(r[0])}</td>
             <td>${r[1]}</td>
             <td>${r[2]}</td>
             <td>${r[3]}</td>
-            <td>${bday}</td>
+            <td>${formatDate(r[4])}</td>
             <td>${r[5]}</td>
             <td>${r[6]}</td>
             <td>${r[7]}</td>
@@ -606,18 +520,16 @@ for(let i=1;i<patientData.length;i++){
             <td>${r[9]}</td>
             <td>${r[10]}</td>
             <td>${r[11]}</td>
-            <td>${schedule}</td>
-            <td>${meet}</td>
-            <td>${pdf}</td>
+            <td>${formatDateTime(r[12])}</td>
+            <td>${r[13] ? `<a href="${r[13]}" target="_blank">Join</a>` : "-"}</td>
+            <td>${r[19] ? `<a href="${r[19]}" target="_blank">View</a>` : "-"}</td>
         </tr>`;
 
-        // ✅ ACTIVE vs HISTORY
         if(r[13]){
             activeHTML += rowHTML;
         } else {
             historyHTML += rowHTML;
         }
-
     });
 
     activeHTML += "</table></div>";
@@ -641,54 +553,28 @@ document.getElementById("form").addEventListener("submit", function(e){
         this.reset();
     });
 });
-// TOGGLE DROPDOWN
+
+/* PROFILE DROPDOWN */
 function toggleProfile(){
     let menu = document.getElementById("profileMenu");
     menu.style.display = menu.style.display === "block" ? "none" : "block";
 }
 
-// LOGOUT
+/* LOGOUT */
 function logout(){
-    locationStorage.removeItem("user");
+    localStorage.removeItem("user");
     location.reload();
 }
-function hideAll(){
-    document.getElementById("dashboard").style.display="none";
-    document.getElementById("profileSection").style.display="none";
-    document.getElementById("documentsSection").style.display="none";
-    document.getElementById("scheduleSection").style.display="none";
-    document.getElementById("helpSection").style.display="none";
-}
 
+/* SIDEBAR NAV */
 function showSection(section){
-    hideAll();
-
-    if(section === "dashboard"){
-        document.getElementById("dashboard").style.display="block";
-    }
-    if(section === "profile"){
-        document.getElementById("profileSection").style.display="block";
-    }
-    if(section === "documents"){
-        document.getElementById("documentsSection").style.display="block";
-    }
-    if(section === "schedule"){
-        document.getElementById("scheduleSection").style.display="block";
-    }
-    if(section === "help"){
-        document.getElementById("helpSection").style.display="block";
-    }
+    document.getElementById("dashboard").style.display = (section==="dashboard")?"block":"none";
+    document.getElementById("profileSection").style.display = (section==="profile")?"block":"none";
+    document.getElementById("documentsSection").style.display = (section==="documents")?"block":"none";
+    document.getElementById("scheduleSection").style.display = (section==="schedule")?"block":"none";
+    document.getElementById("helpSection").style.display = (section==="help")?"block":"none";
 }
-// CHECK LOGIN STATUS PAG LOAD
-window.onload = function(){
-    let user = localStorage.getItem("user");
 
-    if(user){
-        showDashboard(user);
-    } else {
-        showChoice();
-    }
-}
 
 </script>
 
