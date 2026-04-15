@@ -425,18 +425,49 @@ function hideAll(){
     document.getElementById("formBox").style.display="none";
     document.getElementById("dashboard").style.display="none";
 }
+function showDashboard(email){
+    document.getElementById("choiceBox").style.display = "none";
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("formBox").style.display = "none";
+
+    document.getElementById("dashboardBox").style.display = "block";
+    document.querySelector(".sidebar").style.display = "block";
+
+    loadDashboard(email);
+}
+
+function showChoice(){
+    document.getElementById("choiceBox").style.display = "flex";
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("formBox").style.display = "none";
+
+    document.getElementById("dashboardBox").style.display = "none";
+    document.querySelector(".sidebar").style.display = "none";
+}
 
 /* LOGIN */
 function loginUser(){
-
-    let email = document.getElementById("loginEmail").value.trim().toLowerCase();
+    let email = document.getElementById("loginEmail").value;
     let pass = document.getElementById("loginPass").value;
 
-    if(pass !== "1234"){
-        alert("Wrong password");
-        return;
-    }
+    if(pass === "1234"){
+        localStorage.setItem("user", email); // SAVE LOGIN
 
+        showDashboard(email);
+    } else {
+        alert("Wrong password");
+    }
+}
+// CHECK LOGIN STATUS PAG LOAD
+window.onload = function(){
+    let user = localStorage.getItem("user");
+
+    if(user){
+        showDashboard(user);
+    } else {
+        showChoice();
+    }
+}
     let found = false;
 
     patientData.forEach((r,i)=>{
@@ -452,10 +483,11 @@ function loginUser(){
     if(!found){
         alert("Email not found");
         return;
-    }
+}
 
     loadDashboard(email);
-}
+
+
 
 /* DASHBOARD */
 function loadDashboard(email){
@@ -617,6 +649,7 @@ function toggleProfile(){
 
 // LOGOUT
 function logout(){
+    locationStorage.removeItem("user");
     location.reload();
 }
 function hideAll(){
@@ -644,6 +677,16 @@ function showSection(section){
     }
     if(section === "help"){
         document.getElementById("helpSection").style.display="block";
+    }
+}
+// CHECK LOGIN STATUS PAG LOAD
+window.onload = function(){
+    let user = localStorage.getItem("user");
+
+    if(user){
+        showDashboard(user);
+    } else {
+        showChoice();
     }
 }
 
