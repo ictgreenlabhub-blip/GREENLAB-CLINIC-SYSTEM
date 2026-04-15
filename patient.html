@@ -234,16 +234,44 @@ function loadDashboard(email){
     hideAll();
     document.getElementById("dashboard").style.display="block";
 
-    let html = `
-    <h4>My Records</h4>
+    let activeHTML = `
+    <h4>Active</h4>
     <table class="table table-bordered">
     <tr>
         <th>Timestamp</th>
+        <th>Email</th>
         <th>Name</th>
+        <th>Address</th>
+        <th>Birthday</th>
+        <th>Phone</th>
+        <th>Gender</th>
+        <th>Status</th>
         <th>Procedure</th>
         <th>Weight</th>
         <th>Temp</th>
         <th>BP</th>
+        <th>Schedule</th>
+        <th>Meet</th>
+        <th>PDF</th>
+    </tr>`;
+
+    let historyHTML = `
+    <h4 class="mt-5">History</h4>
+    <table class="table table-bordered">
+    <tr>
+        <th>Timestamp</th>
+        <th>Email</th>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Birthday</th>
+        <th>Phone</th>
+        <th>Gender</th>
+        <th>Status</th>
+        <th>Procedure</th>
+        <th>Weight</th>
+        <th>Temp</th>
+        <th>BP</th>
+        <th>Schedule</th>
         <th>Meet</th>
         <th>PDF</th>
     </tr>`;
@@ -252,28 +280,49 @@ function loadDashboard(email){
 
         if(i===0) return;
 
-        let rowEmail = (r[1]||"").toLowerCase();
+        let rowEmail = (r[1]||"").toString().trim().toLowerCase();
         if(rowEmail !== email) return;
+
+        // ✅ FIX TIMESTAMP FORMAT
+        let date = r[0] ? new Date(r[0]).toLocaleString() : "-";
 
         let meet = r[13] ? `<a href="${r[13]}" target="_blank">Join</a>` : "-";
         let pdf = r[19] ? `<a href="${r[19]}" target="_blank">View</a>` : "-";
 
-        html += `
+        let rowHTML = `
         <tr>
-            <td>${r[0]}</td>
+            <td>${date}</td>
+            <td>${r[1]}</td>
             <td>${r[2]}</td>
+            <td>${r[3]}</td>
+            <td>${r[4]}</td>
+            <td>${r[5]}</td>
+            <td>${r[6]}</td>
+            <td>${r[7]}</td>
             <td>${r[8]}</td>
             <td>${r[9]}</td>
             <td>${r[10]}</td>
             <td>${r[11]}</td>
+            <td>${r[12] || "-"}</td>
             <td>${meet}</td>
             <td>${pdf}</td>
         </tr>`;
+
+        // ✅ LOGIC
+        if(r[13]) {
+            // may meet link = ACTIVE
+            activeHTML += rowHTML;
+        } else {
+            // wala = HISTORY
+            historyHTML += rowHTML;
+        }
+
     });
 
-    html += "</table>";
+    activeHTML += "</table>";
+    historyHTML += "</table>";
 
-    document.getElementById("dashboard").innerHTML = html;
+    document.getElementById("dashboard").innerHTML = activeHTML + historyHTML;
 }
 
 /* SUBMIT */
