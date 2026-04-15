@@ -18,16 +18,11 @@ body {
     position: fixed;
     background: linear-gradient(180deg, #c4e479, #16a395);
     padding: 25px 15px;
-    color: rgb(26, 10, 10);
 }
 
 .logo {
     text-align: center;
-    margin-bottom: 50px;
-}
-
-.logo img {
-    width: 120px;
+    margin-bottom: 40px;
 }
 
 .menu a {
@@ -37,7 +32,6 @@ body {
     border-radius: 10px;
     color: black;
     text-decoration: none;
-    transition: 0.3s;
 }
 
 .menu a:hover {
@@ -50,12 +44,10 @@ body {
     padding: 40px;
 }
 
-/* BOX */
 .box {
     background: white;
     padding: 25px;
     border-radius: 15px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
     overflow-x: auto;
 }
 
@@ -90,16 +82,16 @@ button:hover {
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-    <div class="logo">
-        <h3>GreenLab</h3>
-    </div>
+  <div class="logo">
+    <h3>GreenLab</h3>
+  </div>
 
-    <div class="menu">
-        <a href="index.html">🏠 Home</a>
-        <a href="patient.html">🧑 Patient</a>
-        <a href="doctor.html">👨‍⚕️ Doctor</a>
-        <a href="secretary.html">📄 Secretary</a>
-    </div>
+  <div class="menu">
+    <a href="index.html">🏠 Home</a>
+    <a href="patient.html">🧑 Patient</a>
+    <a href="doctor.html">👨‍⚕️ Doctor</a>
+    <a href="secretary.html">📄 Secretary</a>
+  </div>
 </div>
 
 <!-- CONTENT -->
@@ -108,7 +100,7 @@ button:hover {
 
 <h3>Doctor Panel</h3>
 
-<input type="text" id="search" placeholder="Search patient..." onkeyup="search()">
+<input type="text" id="search" placeholder="Search..." onkeyup="search()">
 
 <br><br>
 
@@ -121,112 +113,58 @@ button:hover {
 
 const API_URL = "https://script.google.com/macros/s/AKfycbxFOQixOtBwLDwCoaxFAhwHorFuQeLNxuvXUtmlP5N-8GMR3tfDqNDMwjmChKSU7_TScg/exec";
 
-let DATA = [];
-
-// ================= LOAD =================
-function loadData() {
-  fetch(API_URL)
-    .then(res => res.json())
-    .then(data => {
-      DATA = data;
-      renderTable(data);
-    });
-}
-
-// ================= TABLE =================
-function renderTable(data) {
+fetch(API_URL)
+.then(res=>res.json())
+.then(data=>{
 
   let html = `
   <tr>
-    <th>Timestamp</th>
     <th>Name</th>
     <th>Age</th>
     <th>Sex</th>
     <th>Weight</th>
-    <th>Temperature</th>
-    <th>Blood Pressure</th>
+    <th>Temp</th>
+    <th>BP</th>
     <th>Schedule</th>
-    <th>Meet</th>
-    <th>Notes</th>
     <th>Action</th>
-  </tr>
-  `;
+  </tr>`;
 
-  data.slice(1).forEach((r, i) => {
+  data.slice(1).forEach((r,i)=>{
 
     html += `
     <tr>
-      <td>${formatDate(r[0])}</td>
       <td>${r[2]}</td>
       <td>${computeAge(r[4])}</td>
       <td>${r[6]}</td>
-
-      <td>${r[9] || ""}</td> <!-- WEIGHT -->
-      <td>${r[10] || ""}</td> <!-- TEMP -->
-      <td>${r[11] || ""}</td> <!-- BP -->
-
+      <td>${r[9]||""}</td>
+      <td>${r[10]||""}</td>
+      <td>${r[11]||""}</td>
       <td>${formatDate(r[12])}</td>
-      <td><a href="${r[13]}" target="_blank">Open</a></td>
-
-      <td>${r[19] || ""}</td>
-
       <td>
-        <button onclick="view(${i+2})">View</button>
+        <button onclick="openRX(${i+1})">Prescription</button>
       </td>
-    </tr>
-    `;
+    </tr>`;
   });
 
   document.getElementById("table").innerHTML = html;
+
+});
+
+function openRX(row){
+  window.location.href = "prescription.html?row="+row;
 }
 
-// ================= VIEW =================
-function view(row) {
-  alert("Next step: Prescription / MedCert page (gagawin natin next)");
+function computeAge(bday){
+  if(!bday) return "";
+  let birth=new Date(bday);
+  let today=new Date();
+  return today.getFullYear()-birth.getFullYear();
 }
 
-// ================= AGE =================
-function computeAge(bday) {
-  if (!bday) return "";
-  let birth = new Date(bday);
-  let today = new Date();
-
-  let age = today.getFullYear() - birth.getFullYear();
-  let m = today.getMonth() - birth.getMonth();
-
-  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
-    age--;
-  }
-
-  return age;
+function formatDate(d){
+  if(!d) return "";
+  return new Date(d).toLocaleString("en-PH");
 }
-
-// ================= DATE FORMAT =================
-function formatDate(d) {
-  if (!d) return "";
-  let date = new Date(d);
-
-  return date.toLocaleString("en-PH", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit"
-  });
-}
-
-// ================= SEARCH =================
-function search() {
-  let val = document.getElementById("search").value.toLowerCase();
-
-  let filtered = DATA.filter(r =>
-    (r[2] || "").toLowerCase().includes(val)
-  );
-
-  renderTable([DATA[0], ...filtered]);
-}
-
-loadData();
 
 </script>
 

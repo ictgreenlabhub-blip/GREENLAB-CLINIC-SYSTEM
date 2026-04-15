@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Prescription</title>
+
+<style>
+body { font-family:Arial; background:#f4f6f9; }
+.paper {
+  width:800px; margin:auto;
+  background:white; padding:30px;
+}
+input, textarea, select {
+  width:100%;
+  border:none;
+  border-bottom:1px solid black;
+  margin-bottom:10px;
+}
+textarea { height:80px; }
+button {
+  padding:10px;
+  background:#16a395;
+  color:white;
+  border:none;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="paper">
+
+<h2>GREENLAB CLINIC</h2>
+
+<p>
+Name: <span id="name"></span><br>
+Age: <span id="age"></span><br>
+Sex: <span id="sex"></span><br>
+Address: <span id="address"></span><br>
+Date: <span id="date"></span>
+</p>
+
+<hr>
+
+<h3>Procedure</h3>
+<select id="procedure">
+<option>X-RAY</option>
+<option>LABORATORY</option>
+<option>ULTRASOUND</option>
+<option>ECG</option>
+</select>
+
+<h3>Prescription</h3>
+<textarea id="prescription"></textarea>
+
+<h3>Follow Up</h3>
+<input id="followup">
+
+<h3>Referred By</h3>
+<input id="referred">
+
+<br>
+
+<button onclick="save()">Save</button>
+
+</div>
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbxFOQixOtBwLDwCoaxFAhwHorFuQeLNxuvXUtmlP5N-8GMR3tfDqNDMwjmChKSU7_TScg/exec";
+const row = new URLSearchParams(location.search).get("row");
+
+fetch(API_URL)
+.then(res=>res.json())
+.then(data=>{
+
+  let r = data[row-1];
+
+  document.getElementById("name").innerText = r[2];
+  document.getElementById("age").innerText = computeAge(r[4]);
+  document.getElementById("sex").innerText = r[6];
+  document.getElementById("address").innerText = r[3];
+  document.getElementById("date").innerText = new Date().toLocaleDateString();
+
+  document.getElementById("procedure").value = r[8]||"";
+  document.getElementById("prescription").value = r[16]||"";
+  document.getElementById("followup").value = r[17]||"";
+  document.getElementById("referred").value = r[18]||"";
+
+});
+
+function save(){
+  fetch(API_URL,{
+    method:"POST",
+    body: JSON.stringify({
+      action:"doctorSave",
+      row: row,
+      procedure: document.getElementById("procedure").value,
+      prescription: document.getElementById("prescription").value,
+      followup: document.getElementById("followup").value,
+      referred: document.getElementById("referred").value
+    })
+  }).then(()=>alert("Saved"));
+}
+
+function computeAge(b){
+  if(!b) return "";
+  let d=new Date(b);
+  return new Date().getFullYear()-d.getFullYear();
+}
+
+</script>
+
+</body>
+</html>
