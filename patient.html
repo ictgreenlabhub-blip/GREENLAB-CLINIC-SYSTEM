@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,14 +14,12 @@ body {
     background: #f4f6f9;
 }
 
-/* SIDEBAR */
 .sidebar {
     width: 250px;
     height: 100vh;
     position: fixed;
     background: linear-gradient(180deg, #c4e479, #16a395);
     padding: 25px 15px;
-    color: rgb(26, 10, 10);
 }
 
 .logo {
@@ -32,63 +31,48 @@ body {
     width: 120px;
 }
 
-/* MENU */
-.menu {
-    margin-top: 20px;
-}
-
 .menu a {
     display: block;
-    padding: 15px 15px;
-    margin-bottom: 12px;
+    padding: 15px;
+    margin-bottom: 10px;
     border-radius: 10px;
-    color: rgb(20, 1, 1);
+    color: black;
     text-decoration: none;
-    font-weight: 500;
-    transition: 0.3s;
 }
 
-.menu a:hover {
-    background: rgba(255,255,255,0.2);
-    padding-left: 20px;
-}
-
-/* CONTENT */
 .content {
     margin-left: 270px;
     padding: 50px;
 }
 
-/* FORM BOX */
 .form-box {
     max-width: 700px;
     margin: auto;
     background: white;
     padding: 30px;
     border-radius: 15px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+
+#loginBox {
+    position: fixed;
+    right: 20px;
+    top: 100px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 250px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+#dashboard {
+    display: none;
+    margin-top: 20px;
 }
 </style>
+
 </head>
 
 <body>
-
-<!-- LOGIN BUTTON -->
-<div style="position:absolute; top:20px; right:20px;">
-  <button onclick="showLogin()">Login</button>
-</div>
-
-<!-- LOGIN BOX -->
-<div id="loginBox" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
-background:white; padding:25px; border-radius:15px; box-shadow:0 5px 20px rgba(0,0,0,0.2); z-index:1000;">
-
-<h4>Patient Login</h4>
-<input id="email" class="form-control mb-2" placeholder="Email">
-<input id="bday" class="form-control mb-2" placeholder="Birthday YYYY-MM-DD">
-
-<button onclick="login()" class="btn btn-success w-100">Login</button>
-
-</div>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
@@ -97,28 +81,27 @@ background:white; padding:25px; border-radius:15px; box-shadow:0 5px 20px rgba(0
     </div>
 
     <div class="menu">
-        <a href="patient.html">🧑 GreenLab Patient Portal</a>
-        <a href="doctor.html">👨‍⚕️ Doctor</a>
-        <a href="secretary.html">📋 Secretary</a>
+        <a href="#">🧑 Patient Portal</a>
     </div>
 </div>
 
 <!-- CONTENT -->
 <div class="content">
 
-<!-- FORM -->
-<div class="form-box" id="formBox">
+<div id="formBox" class="form-box">
 
-<h4 class="mb-3">Patient Information</h4>
+<h4>Patient Information</h4>
 
 <form id="form">
+
 <input class="form-control mb-2" name="name" placeholder="Full Name" required>
-<input class="form-control mb-2" name="email" placeholder="Email">
-<input class="form-control mb-2" name="phone" placeholder="Phone Number">
+<input class="form-control mb-2" name="email" placeholder="Email" required>
+<input class="form-control mb-2" name="phone" placeholder="Phone">
+
 <input class="form-control mb-2" name="address" placeholder="Address">
 
 <label>Birthday</label>
-<input type="date" class="form-control mb-2" name="birthday">
+<input type="date" class="form-control mb-2" name="birthday" required>
 
 <label>Gender</label>
 <select class="form-control mb-2" name="gender">
@@ -126,44 +109,41 @@ background:white; padding:25px; border-radius:15px; box-shadow:0 5px 20px rgba(0
 <option>Female</option>
 </select>
 
-<label>Civil Status</label>
-<select class="form-control mb-2" name="status">
-<option>Single</option>
-<option>Married</option>
-<option>Widowed</option>
-<option>Child</option>
-</select>
-
 <input class="form-control mb-2" name="weight" placeholder="Weight">
 <input class="form-control mb-2" name="temperature" placeholder="Temperature">
 <input class="form-control mb-2" name="bp" placeholder="Blood Pressure">
-
-<label>Procedure</label>
-<input class="form-control mb-3" name="procedure" value="Consultation">
 
 <button class="btn btn-success w-100">Submit</button>
 
 </form>
 
-<p id="msg" class="mt-3 text-success"></p>
-
 </div>
 
 <!-- DASHBOARD -->
-<div id="dashboard" style="display:none;">
-<h3>My Consultation History</h3>
-<div id="timeline"></div>
+<div id="dashboard">
+    <h4>Your History</h4>
+    <div id="timeline"></div>
 </div>
+
+</div>
+
+<!-- LOGIN BOX -->
+<div id="loginBox">
+
+<h5>Patient Login</h5>
+
+<input id="email" class="form-control mb-2" placeholder="Email">
+<input id="bday" type="date" class="form-control mb-2">
+
+<button onclick="login()" class="btn btn-success w-100">Login</button>
 
 </div>
 
 <script>
 
-
-// 👉 API
 const API_URL = "https://script.google.com/macros/s/AKfycbyKc-drGdsGoTBgU3VPTcjAecrE7ltzReWEubKh7Cpw09XuEghc5eKOT8RfSNRmIgDe9w/exec";
 
-// ================= FORM SUBMIT =================
+// ================= SUBMIT =================
 document.getElementById("form").addEventListener("submit", function(e){
     e.preventDefault();
 
@@ -171,94 +151,79 @@ document.getElementById("form").addEventListener("submit", function(e){
 
     fetch(API_URL, {
         method: "POST",
+        mode: "no-cors",
         body: formData
     })
-    .then(res => res.text())
-    .then(data => {
+    .then(() => {
         document.getElementById("formBox").innerHTML = `
         <div style="text-align:center;padding:50px;">
           <h1 style="color:#16a395;">THANK YOU!</h1>
-          <p>Your consultation has been submitted.</p>
         </div>`;
     });
-});
 
-// ================= SHOW LOGIN =================
-function showLogin(){
-  document.getElementById("loginBox").style.display = "block";
-}
+});
 
 // ================= LOGIN =================
 function login(){
 
-  let email = document.getElementById("email").value.trim().toLowerCase();
+  let email = document.getElementById("email").value.toLowerCase();
   let bday = document.getElementById("bday").value;
 
   fetch(API_URL)
   .then(res=>res.json())
   .then(data=>{
 
-    console.log("DATA:", data); // debug
-
     let user = data.find(r => {
 
-      let sheetEmail = (r[1] || "").toString().toLowerCase();
-      let sheetBday = (r[4] || "").toString();
+      let e = (r[1]||"").toLowerCase();
 
-      return sheetEmail === email && sheetBday.includes(bday);
+      let d = "";
+      if(r[4]){
+        let date = new Date(r[4]);
+        if(!isNaN(date)){
+          d = date.toISOString().split("T")[0];
+        }
+      }
 
+      return e === email && d === bday;
     });
 
     if(!user){
-      alert("Invalid login");
+      alert("Invalid login ❌");
       return;
     }
 
-    localStorage.setItem("userEmail", email);
+    alert("Login success ✅");
 
-    // UI
+    localStorage.setItem("email", email);
+
+    document.getElementById("formBox").style.display = "none";
     document.getElementById("loginBox").style.display = "none";
-    document.getElementById("profileBox").style.display = "block";
-    document.getElementById("userEmail").innerText = email;
+    document.getElementById("dashboard").style.display = "block";
 
-    showPatientView();
     loadDashboard(email);
 
   });
+
 }
 
-// ================= HIDE SIDEBAR =================
-function showPatientView(){
-  document.querySelector(".sidebar").style.display = "none";
-  document.getElementById("formBox").style.display = "none";
-}
-
-// ================= LOAD DASHBOARD =================
+// ================= DASHBOARD =================
 function loadDashboard(email){
 
   fetch(API_URL)
   .then(res=>res.json())
   .then(data=>{
 
-    let html = `
-    <table class="table table-bordered">
-    <tr>
-      <th>Date</th>
-      <th>Prescription</th>
-      <th>Meet</th>
-    </tr>`;
+    let html = "<table class='table table-bordered'><tr><th>Date</th><th>Prescription</th></tr>";
 
     data.slice(1).forEach(r=>{
 
-      let sheetEmail = (r[1] || "").toString().toLowerCase();
-
-      if(sheetEmail === email){
+      if((r[1]||"").toLowerCase() === email){
 
         html += `
         <tr>
           <td>${new Date(r[0]).toLocaleString()}</td>
           <td>${r[16] || "-"}</td>
-          <td>${r[13] ? `<a href="${r[13]}" target="_blank">Join</a>` : "-"}</td>
         </tr>`;
       }
 
@@ -267,39 +232,22 @@ function loadDashboard(email){
     html += "</table>";
 
     document.getElementById("timeline").innerHTML = html;
-    document.getElementById("dashboard").style.display = "block";
 
   });
-}
-
-// ================= PROFILE MENU =================
-function toggleProfile(){
-
-  let menu = document.getElementById("profileMenu");
-
-  menu.style.display = menu.style.display === "block" ? "none" : "block";
-}
-
-// ================= LOGOUT =================
-function logout(){
-
-  localStorage.removeItem("userEmail");
-
-  location.reload();
 
 }
 
 // ================= AUTO LOGIN =================
 window.onload = function(){
 
-  let email = localStorage.getItem("userEmail");
+  let email = localStorage.getItem("email");
 
   if(email){
 
-    document.getElementById("profileBox").style.display = "block";
-    document.getElementById("userEmail").innerText = email;
+    document.getElementById("formBox").style.display = "none";
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
 
-    showPatientView();
     loadDashboard(email);
 
   }
