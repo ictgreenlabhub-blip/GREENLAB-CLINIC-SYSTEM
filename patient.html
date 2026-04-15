@@ -79,14 +79,23 @@ body {
     background: white;
     padding: 25px;
     border-radius: 15px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px #070707;
 }
 
 /* TABLE */
 .table-box {
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
+    overflow-x: auto;
+}
+.table {
+    font-size: 12px
+}
+.table th, .table td {
+    padding: 6px;
+    white-space: nowrap;
+}
+.table th {
+    background: #f1f1f1;
+    font-weight: bold;
 }
 </style>
 </head>
@@ -234,9 +243,32 @@ function loadDashboard(email){
     hideAll();
     document.getElementById("dashboard").style.display="block";
 
+    // ✅ FORMAT FUNCTIONS
+    let formatDate = (d) => {
+        if(!d) return "-";
+        return new Date(d).toLocaleDateString("en-PH", {
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+        });
+    };
+
+    let formatDateTime = (d) => {
+        if(!d) return "-";
+        return new Date(d).toLocaleString("en-PH", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        });
+    };
+
+    // ================= ACTIVE TABLE =================
     let activeHTML = `
     <h4>Active</h4>
-    <table class="table table-bordered">
+    <div class="table-box">
+    <table class="table table-bordered table-sm">
     <tr>
         <th>Timestamp</th>
         <th>Email</th>
@@ -255,9 +287,11 @@ function loadDashboard(email){
         <th>PDF</th>
     </tr>`;
 
+    // ================= HISTORY TABLE =================
     let historyHTML = `
     <h4 class="mt-5">History</h4>
-    <table class="table table-bordered">
+    <div class="table-box">
+    <table class="table table-bordered table-sm">
     <tr>
         <th>Timestamp</th>
         <th>Email</th>
@@ -276,6 +310,7 @@ function loadDashboard(email){
         <th>PDF</th>
     </tr>`;
 
+    // ================= LOOP =================
     patientData.forEach((r,i)=>{
 
         if(i===0) return;
@@ -283,19 +318,20 @@ function loadDashboard(email){
         let rowEmail = (r[1]||"").toString().trim().toLowerCase();
         if(rowEmail !== email) return;
 
-        // ✅ FIX TIMESTAMP FORMAT
-        let date = r[0] ? new Date(r[0]).toLocaleString() : "-";
+        let timestamp = formatDateTime(r[0]);
+        let bday = formatDate(r[4]);
+        let schedule = formatDateTime(r[12]);
 
         let meet = r[13] ? `<a href="${r[13]}" target="_blank">Join</a>` : "-";
         let pdf = r[19] ? `<a href="${r[19]}" target="_blank">View</a>` : "-";
 
         let rowHTML = `
         <tr>
-            <td>${date}</td>
+            <td>${timestamp}</td>
             <td>${r[1]}</td>
             <td>${r[2]}</td>
             <td>${r[3]}</td>
-            <td>${r[4]}</td>
+            <td>${bday}</td>
             <td>${r[5]}</td>
             <td>${r[6]}</td>
             <td>${r[7]}</td>
@@ -303,24 +339,22 @@ function loadDashboard(email){
             <td>${r[9]}</td>
             <td>${r[10]}</td>
             <td>${r[11]}</td>
-            <td>${r[12] || "-"}</td>
+            <td>${schedule}</td>
             <td>${meet}</td>
             <td>${pdf}</td>
         </tr>`;
 
-        // ✅ LOGIC
-        if(r[13]) {
-            // may meet link = ACTIVE
+        // ✅ ACTIVE vs HISTORY
+        if(r[13]){
             activeHTML += rowHTML;
         } else {
-            // wala = HISTORY
             historyHTML += rowHTML;
         }
 
     });
 
-    activeHTML += "</table>";
-    historyHTML += "</table>";
+    activeHTML += "</table></div>";
+    historyHTML += "</table></div>";
 
     document.getElementById("dashboard").innerHTML = activeHTML + historyHTML;
 }
