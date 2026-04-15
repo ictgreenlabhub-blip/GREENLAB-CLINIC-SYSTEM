@@ -5,108 +5,109 @@
 
 <style>
 
-/* PAPER SIZE */
-body {
+body{
   background:#f4f6f9;
   font-family: Arial;
 }
 
-.paper {
+/* PORTRAIT SIZE */
+.paper{
   width: 8.5in;
-  height: 5.5in;
+  height: 11in;
   margin:auto;
   background:white;
-  padding:20px 30px;
-  position:relative;
+  padding:40px;
   box-sizing:border-box;
+  position:relative;
 }
 
-/* HEADER CENTER */
-.header {
-  text-align:center;
+/* HEADER LEFT */
+.header{
+  display:flex;
+  align-items:center;
+  gap:15px;
 }
 
-.logo {
-  width:70px;
+.logo{
+  width:80px;
 }
 
-.clinic-title {
+.header-text{
+  font-size:12px;
+}
+
+.clinic-title{
   font-weight:bold;
   color:#2e7d32;
-  font-size:15px;
-}
-
-.clinic-text {
-  font-size:11px;
+  font-size:16px;
 }
 
 /* ROW */
-.row {
-  margin-top:10px;
-  font-size:13px;
+.row{
+  margin-top:20px;
+  font-size:14px;
 }
 
-/* UNDERLINE */
-.line {
+/* LINE */
+.line{
   border-bottom:1px solid black;
   display:inline-block;
-  min-width:120px;
+  min-width:150px;
 }
 
 /* RX */
-.rx {
+.rx{
+  font-size:120px;
+  color:#cfcfcf;
   position:absolute;
-  font-size:80px;
-  color:#ccc;
-  top:150px;
-  left:40px;
-  opacity:0.3;
+  left:50px;
+  top:250px;
+  opacity:0.4;
 }
 
 /* SECTION */
-.section {
-  margin-top:20px;
-  font-size:13px;
+.section{
+  margin-top:25px;
+  font-size:14px;
 }
 
-/* INLINE INPUT FIX */
-.inline-input {
+/* INPUT */
+.inline{
   border:none;
   border-bottom:1px solid black;
   outline:none;
-  font-size:13px;
+  font-size:14px;
 }
 
-/* TEXTAREA FIX */
-textarea {
+/* TEXTAREA */
+textarea{
   width:100%;
   border:none;
   outline:none;
-  font-size:13px;
+  font-size:14px;
   resize:none;
 }
 
-/* PROCEDURE FIX */
-.procedure-wrap {
-  display:inline-flex;
-  align-items:center;
-  gap:5px;
-}
-
-select {
+/* PROCEDURE */
+select{
   border:none;
   border-bottom:1px solid black;
   outline:none;
-  font-size:13px;
-  background:transparent;
+  font-size:14px;
 }
 
 /* FOOTER */
-.footer {
+.footer{
   position:absolute;
-  bottom:20px;
-  right:30px;
-  font-size:11px;
+  bottom:50px;
+  right:60px;
+  text-align:center;
+  font-size:12px;
+}
+
+.signature{
+  width:120px;
+  opacity:0.7;
 }
 
 </style>
@@ -116,34 +117,33 @@ select {
 
 <div class="paper">
 
-<!-- HEADER CENTER -->
+<!-- HEADER (LEFT STYLE) -->
 <div class="header">
-  <img src="Greenlab-logo.png" class="logo"><br>
+  <img src="Greenlab-logo.png" class="logo">
 
-  <div class="clinic-title">
-    GREEN LAB CLINIC AND WELLNESS HUB
-  </div>
-
-  <div class="clinic-text">
+  <div class="header-text">
+    <div class="clinic-title">
+      GREEN LAB CLINIC AND WELLNESS HUB
+    </div>
     OWNED AND OPERATED BY TGM GREEN MEDICAL CORP.<br>
     Purok 4, Apokon Tagum City, Davao del Norte<br>
     Globe: 0905-240-6557 | Tel: 084-655-0783<br>
-    greenlabhub@gmail.com
+    Email Address: greenlabhub@gmail.com
   </div>
 </div>
 
 <!-- INFO -->
 <div class="row">
   Patient Name: <span class="line" id="name"></span>
-  &nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;
   Age: <span class="line" id="age"></span>
-  &nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;
   Sex: <span class="line" id="sex"></span>
 </div>
 
 <div class="row">
-  Address: <span class="line" style="min-width:250px" id="address"></span>
-  &nbsp;&nbsp;
+  Address: <span class="line" style="min-width:300px" id="address"></span>
+  &nbsp;&nbsp;&nbsp;
   Date: <span class="line" id="date"></span>
 </div>
 
@@ -153,45 +153,40 @@ select {
 <!-- PROCEDURE -->
 <div class="section">
   Procedure:
-  <span class="procedure-wrap">
-    <select id="procedure">
-      <option value="">Select</option>
-      <option>X-RAY</option>
-      <option>LABORATORY</option>
-      <option>ULTRASOUND</option>
-      <option>ECG</option>
-    </select>
-  </span>
+  <select id="procedure">
+    <option value="">Select</option>
+    <option>X-RAY</option>
+    <option>LABORATORY</option>
+    <option>ULTRASOUND</option>
+    <option>ECG</option>
+  </select>
 </div>
 
-<!-- PRESCRIPTION FIX -->
+<!-- PRESCRIPTION -->
 <div class="section">
   Prescription:
-  <textarea id="prescription" rows="3" placeholder="Type prescription here..."></textarea>
+  <textarea id="prescription" rows="5"></textarea>
 </div>
 
 <!-- REFERRED -->
 <div class="section">
   Referred by:
-  <input id="referred" class="inline-input">
+  <input id="referred" class="inline">
 </div>
 
 <!-- FOLLOW UP -->
 <div class="section">
   Follow up check-up:
-  <input id="followup" class="inline-input">
+  <input id="followup" class="inline">
 </div>
 
 <!-- FOOTER -->
 <div class="footer">
+  <img src="signature.png" class="signature"><br>
   Dr. AYA DANIKA A. ALTERADO MD<br>
   LIC NO: 0142226<br>
   PTR NO: 2165087
 </div>
-
-<br>
-
-<button onclick="save()">Save</button>
 
 </div>
 
@@ -217,22 +212,7 @@ fetch(API_URL)
   document.getElementById("referred").value = r[18] || "";
 });
 
-function save(){
-  fetch(API_URL,{
-    method:"POST",
-    body: JSON.stringify({
-      action:"doctorSave",
-      row: row,
-      procedure: document.getElementById("procedure").value,
-      prescription: document.getElementById("prescription").value,
-      followup: document.getElementById("followup").value,
-      referred: document.getElementById("referred").value
-    })
-  }).then(()=>alert("Saved"));
-}
-
 function computeAge(b){
-  if(!b) return "";
   let d=new Date(b);
   return new Date().getFullYear()-d.getFullYear();
 }
