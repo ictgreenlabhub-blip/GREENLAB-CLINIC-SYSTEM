@@ -143,6 +143,8 @@ fetch(API_URL)
     <th>BP</th>
     <th>Schedule</th>
     <th>Meet</th>
+    <th>PDF</th>
+    <th>Send</th>
     <th>Action</th>
   </tr>`;
 
@@ -183,9 +185,23 @@ fetch(API_URL)
         ${meet ? `<a href="${meet}" target="_blank">Open</a>` : "-"}
       </td>
 
+      <!-- ✅ PDF COLUMN -->
+      <td>
+        ${r[19] ? `<a href="${r[19]}" target="_blank">View</a>` : "-"}
+      </td>
+
+      <!-- ✅ SEND COLUMN -->
+      <td>
+        ${r[20] === "SENT"
+          ? "SENT"
+          : `<button onclick="send(${i+1})">Send</button>`}
+      </td>
+
+      <!-- ORIGINAL -->
       <td>
         <button onclick="openRX(${i+1})">Prescription</button>
       </td>
+
     </tr>`;
   });
 
@@ -202,6 +218,21 @@ function computeAge(bday){
   let d=new Date(bday);
   if(isNaN(d)) return "";
   return new Date().getFullYear()-d.getFullYear();
+}
+
+/* ✅ NEW SEND FUNCTION */
+function send(row){
+  fetch(API_URL,{
+    method:"POST",
+    body: JSON.stringify({
+      action:"sendPrescription",
+      row: row
+    })
+  })
+  .then(()=> {
+    alert("Sent!");
+    location.reload(); // refresh para makita SENT
+  });
 }
 
 </script>
