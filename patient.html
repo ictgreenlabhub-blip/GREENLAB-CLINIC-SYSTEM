@@ -241,7 +241,15 @@ button, .btn {
     color: white;
     border-radius: 8px;
 }
-
+.profile-menu {
+    display: none;
+    opacity: 0;
+    transition: 0.3s;
+}
+.profile-menu.show {
+    display: block;
+    opacity: 1;
+}
 /* TABLE IMPROVEMENT */
 .table {
     font-size: 12px;
@@ -271,8 +279,16 @@ button, .btn {
     </div>
 
     <div class="menu">
-        <a href="#">🧑 Patient Portal</a>
-    </div>
+    <p style="font-size:12px; opacity:0.7;">PATIENT MENU</p>
+
+    <a href="#" onclick="showSection('dashboard')">🏠 Dashboard</a>
+    <a href="#" onclick="showSection('profile')">👤 My Profile</a>
+    <a href="#" onclick="openQuickForm()">➕ New Consultation</a>
+    <a href="#" onclick="showSection('documents')">📄 My Documents</a>
+    <a href="#" onclick="showSection('schedule')">📅 Schedule</a>
+    <a href="#" onclick="showSection('help')">💬 Help</a>
+    <a href="#" onclick="logout()">🚪 Logout</a>
+</div>
 </div>
 
 <!-- CONTENT -->
@@ -339,9 +355,38 @@ button, .btn {
 </div>
 
 <!-- DASHBOARD -->
-<div id="dashboard" style="display:none;" class="table-box"></div>
+<!-- DASHBOARD -->
+<div id="dashboard"></div>
 
+<!-- PROFILE -->
+<div id="profileSection" style="display:none;" class="card-box">
+    <h4>My Profile</h4>
+    <p><b>Name:</b> <span id="pName"></span></p>
+    <p><b>Email:</b> <span id="pEmail"></span></p>
+    <p><b>Birthday:</b> <span id="pBday"></span></p>
+    <p><b>Address:</b> <span id="pAddress"></span></p>
+    <p><b>Phone:</b> <span id="pPhone"></span></p>
 </div>
+
+<!-- DOCUMENTS -->
+<div id="documentsSection" style="display:none;" class="card-box">
+    <h4>My Documents</h4>
+    <p>📄 Prescription & MedCert will appear here</p>
+</div>
+
+<!-- SCHEDULE -->
+<div id="scheduleSection" style="display:none;" class="card-box">
+    <h4>My Schedule</h4>
+    <p>📅 Upcoming consultations will appear here</p>
+</div>
+
+<!-- HELP -->
+<div id="helpSection" style="display:none;" class="card-box">
+    <h4>Help</h4>
+    <p>📞 Contact: 09123456789</p>
+    <p>🕒 Clinic Hours: 8AM - 5PM</p>
+</div>
+
 
 <script>
 
@@ -417,6 +462,21 @@ function loadDashboard(email){
 
     hideAll();
     document.getElementById("dashboard").style.display="block";
+    document.getElementById("pEmail").innerText = email;
+
+// kunin first record
+for(let i=1;i<patientData.length;i++){
+    let r = patientData[i];
+    if((r[1]||"").toLowerCase() === email){
+
+        document.getElementById("pName").innerText = r[2];
+        document.getElementById("pAddress").innerText = r[3];
+        document.getElementById("pBday").innerText = new Date(r[4]).toLocaleDateString();
+        document.getElementById("pPhone").innerText = r[5];
+
+        break;
+    }
+}
 
     // ✅ FORMAT FUNCTIONS
     let formatDate = (d) => {
@@ -559,7 +619,33 @@ function toggleProfile(){
 function logout(){
     location.reload();
 }
+function hideAll(){
+    document.getElementById("dashboard").style.display="none";
+    document.getElementById("profileSection").style.display="none";
+    document.getElementById("documentsSection").style.display="none";
+    document.getElementById("scheduleSection").style.display="none";
+    document.getElementById("helpSection").style.display="none";
+}
 
+function showSection(section){
+    hideAll();
+
+    if(section === "dashboard"){
+        document.getElementById("dashboard").style.display="block";
+    }
+    if(section === "profile"){
+        document.getElementById("profileSection").style.display="block";
+    }
+    if(section === "documents"){
+        document.getElementById("documentsSection").style.display="block";
+    }
+    if(section === "schedule"){
+        document.getElementById("scheduleSection").style.display="block";
+    }
+    if(section === "help"){
+        document.getElementById("helpSection").style.display="block";
+    }
+}
 
 </script>
 
