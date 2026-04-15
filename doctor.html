@@ -1,78 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <title>Doctor Panel</title>
 
 <style>
 body {
-    margin: 0;
-    font-family: Arial;
-    background: #f4f6f9;
+  margin:0;
+  font-family:Arial;
+  background:#f4f6f9;
 }
 
 /* SIDEBAR */
 .sidebar {
-    width: 250px;
-    height: 100vh;
-    position: fixed;
-    background: linear-gradient(180deg, #c4e479, #16a395);
-    padding: 25px 15px;
-}
-
-.logo {
-    text-align: center;
-    margin-bottom: 40px;
+  width:250px;
+  height:100vh;
+  position:fixed;
+  background: linear-gradient(180deg,#c4e479,#16a395);
+  padding:25px 15px;
 }
 
 .menu a {
-    display: block;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    color: black;
-    text-decoration: none;
+  display:block;
+  padding:12px;
+  margin-bottom:10px;
+  text-decoration:none;
+  color:black;
+  border-radius:8px;
 }
 
 .menu a:hover {
-    background: rgba(255,255,255,0.2);
+  background:rgba(255,255,255,0.2);
+}
+.logo {
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.logo img {
+    width: 120px;
 }
 
 /* CONTENT */
 .content {
-    margin-left: 270px;
-    padding: 40px;
+  margin-left:270px;
+  padding:30px;
 }
 
+/* BOX */
 .box {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    overflow-x: auto;
+  background:white;
+  padding:20px;
+  border-radius:15px;
 }
 
+/* TABLE FIX */
 table {
+  font-size:12px;
   width:100%;
   border-collapse: collapse;
-  font-size: 12px;
 }
 
 th, td {
-  border:1px solid #ddd;
-  padding:6px;
+  padding:4px 6px;
+  white-space:nowrap;
+  text-align:left;
+}
+
+td {
+  max-width:120px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* COLORS */
+.schedule-ok {
+  color:green;
+  font-weight:bold;
+}
+
+.schedule-none {
+  color:gray;
 }
 
 button {
-  padding:5px 10px;
-  border:none;
+  padding:3px 8px;
+  font-size:11px;
   background:#16a395;
   color:white;
+  border:none;
   border-radius:5px;
   cursor:pointer;
 }
 
-button:hover {
-  background:#128a7e;
+a {
+  color:#16a395;
+  text-decoration:none;
 }
 </style>
 
@@ -80,31 +102,26 @@ button:hover {
 
 <body>
 
-<!-- SIDEBAR -->
+!-- SIDEBAR -->
 <div class="sidebar">
-  <div class="logo">
-    <h3>GreenLab</h3>
-  </div>
+    <div class="logo">
+        <img src="Green-Logo.png">
+    </div>
 
-  <div class="menu">
-    <a href="index.html">🏠 Home</a>
-    <a href="patient.html">🧑 Patient</a>
-    <a href="doctor.html">👨‍⚕️ Doctor</a>
-    <a href="secretary.html">📄 Secretary</a>
-  </div>
+    <div class="menu">
+        <a href="index.html">🏠 Home</a>
+        <a href="patient.html">🧑 Patient Form</a>
+        <a href="doctor.html">👨‍⚕️ Doctor</a>
+        <a href="secretary.html">📋 Secretary</a>
+    </div>
 </div>
 
-<!-- CONTENT -->
 <div class="content">
 <div class="box">
 
 <h3>Doctor Panel</h3>
 
-<input type="text" id="search" placeholder="Search..." onkeyup="search()">
-
-<br><br>
-
-<table id="table"></table>
+<table id="table" border="1"></table>
 
 </div>
 </div>
@@ -126,20 +143,47 @@ fetch(API_URL)
     <th>Temp</th>
     <th>BP</th>
     <th>Schedule</th>
+    <th>Meet</th>
     <th>Action</th>
   </tr>`;
 
   data.slice(1).forEach((r,i)=>{
 
+    let schedule = r[12];
+    let meet = r[13];
+
+    let scheduleDisplay = "";
+    let scheduleClass = "schedule-none";
+
+    if(schedule){
+      let d = new Date(schedule);
+      if(!isNaN(d)){
+        scheduleDisplay = d.toLocaleString("en-PH");
+        scheduleClass = "schedule-ok";
+      } else {
+        scheduleDisplay = "Invalid";
+      }
+    } else {
+      scheduleDisplay = "No Schedule";
+    }
+
     html += `
     <tr>
-      <td>${r[2]}</td>
+      <td>${r[2]||""}</td>
       <td>${computeAge(r[4])}</td>
-      <td>${r[6]}</td>
+      <td>${r[6]||""}</td>
       <td>${r[9]||""}</td>
       <td>${r[10]||""}</td>
       <td>${r[11]||""}</td>
-      <td>${formatDate(r[12])}</td>
+
+      <td class="${scheduleClass}">
+        ${scheduleDisplay}
+      </td>
+
+      <td>
+        ${meet ? `<a href="${meet}" target="_blank">Open</a>` : "-"}
+      </td>
+
       <td>
         <button onclick="openRX(${i+1})">Prescription</button>
       </td>
@@ -156,14 +200,9 @@ function openRX(row){
 
 function computeAge(bday){
   if(!bday) return "";
-  let birth=new Date(bday);
-  let today=new Date();
-  return today.getFullYear()-birth.getFullYear();
-}
-
-function formatDate(d){
-  if(!d) return "";
-  return new Date(d).toLocaleString("en-PH");
+  let d=new Date(bday);
+  if(isNaN(d)) return "";
+  return new Date().getFullYear()-d.getFullYear();
 }
 
 </script>
