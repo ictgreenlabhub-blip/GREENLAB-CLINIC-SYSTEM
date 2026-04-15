@@ -4,103 +4,131 @@
 <title>Prescription</title>
 
 <style>
+
+/* PAPER SIZE */
 body {
-  font-family: Arial;
   background:#f4f6f9;
+  font-family: Arial;
 }
 
-/* PAPER */
 .paper {
-  width: 800px;
-  margin: auto;
-  background: white;
-  padding: 30px 40px;
-  position: relative;
+  width: 8.5in;
+  height: 5.5in;
+  margin:auto;
+  background:white;
+  padding:20px 30px;
+  position:relative;
+  box-sizing:border-box;
 }
 
-/* HEADER */
+/* HEADER CENTER */
 .header {
-  display:flex;
-  align-items:center;
+  text-align:center;
 }
 
 .logo {
-  width:80px;
-  margin-right:10px;
-}
-
-.clinic-text {
-  font-size:13px;
+  width:70px;
 }
 
 .clinic-title {
   font-weight:bold;
   color:#2e7d32;
-  font-size:16px;
+  font-size:15px;
 }
 
-/* LINE TEXT */
-.line {
-  border-bottom:1px solid black;
-  display:inline-block;
-  min-width:150px;
+.clinic-text {
+  font-size:11px;
 }
 
 /* ROW */
 .row {
-  margin-top:15px;
-  font-size:14px;
+  margin-top:10px;
+  font-size:13px;
 }
 
-/* RX WATERMARK */
+/* UNDERLINE */
+.line {
+  border-bottom:1px solid black;
+  display:inline-block;
+  min-width:120px;
+}
+
+/* RX */
 .rx {
   position:absolute;
-  font-size:100px;
+  font-size:80px;
   color:#ccc;
-  top:180px;
-  left:50px;
+  top:150px;
+  left:40px;
   opacity:0.3;
 }
 
 /* SECTION */
 .section {
-  margin-top:30px;
-  font-size:14px;
+  margin-top:20px;
+  font-size:13px;
 }
 
-/* INPUT */
-textarea, input, select {
+/* INLINE INPUT FIX */
+.inline-input {
+  border:none;
+  border-bottom:1px solid black;
+  outline:none;
+  font-size:13px;
+}
+
+/* TEXTAREA FIX */
+textarea {
   width:100%;
   border:none;
   outline:none;
-  font-size:14px;
+  font-size:13px;
+  resize:none;
+}
+
+/* PROCEDURE FIX */
+.procedure-wrap {
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+}
+
+select {
+  border:none;
+  border-bottom:1px solid black;
+  outline:none;
+  font-size:13px;
+  background:transparent;
 }
 
 /* FOOTER */
 .footer {
   position:absolute;
-  bottom:40px;
-  right:40px;
-  text-align:left;
-  font-size:12px;
+  bottom:20px;
+  right:30px;
+  font-size:11px;
 }
-</style>
 
+</style>
 </head>
 
 <body>
 
 <div class="paper">
 
-<!-- HEADER -->
+<!-- HEADER CENTER -->
 <div class="header">
-  <img src="Greenlab-logo.png" class="logo">
+  <img src="Greenlab-logo.png" class="logo"><br>
+
+  <div class="clinic-title">
+    GREEN LAB CLINIC AND WELLNESS HUB
+  </div>
+
   <div class="clinic-text">
-    <div class="clinic-title">GREEN LAB CLINIC AND WELLNESS HUB</div>
     OWNED AND OPERATED BY TGM GREEN MEDICAL CORP.<br>
     Purok 4, Apokon Tagum City, Davao del Norte<br>
-    Globe: 0905-240-6557 Tel No: 084-655-0783<br>
-    Email Address: greenlabhub@gmail.com
+    Globe: 0905-240-6557 | Tel: 084-655-0783<br>
+    greenlabhub@gmail.com
   </div>
 </div>
 
@@ -114,7 +142,7 @@ textarea, input, select {
 </div>
 
 <div class="row">
-  Address: <span class="line" style="min-width:300px" id="address"></span>
+  Address: <span class="line" style="min-width:250px" id="address"></span>
   &nbsp;&nbsp;
   Date: <span class="line" id="date"></span>
 </div>
@@ -125,30 +153,33 @@ textarea, input, select {
 <!-- PROCEDURE -->
 <div class="section">
   Procedure:
-  <select id="procedure">
-    <option>X-RAY</option>
-    <option>LABORATORY</option>
-    <option>ULTRASOUND</option>
-    <option>ECG</option>
-  </select>
+  <span class="procedure-wrap">
+    <select id="procedure">
+      <option value="">Select</option>
+      <option>X-RAY</option>
+      <option>LABORATORY</option>
+      <option>ULTRASOUND</option>
+      <option>ECG</option>
+    </select>
+  </span>
 </div>
 
-<!-- PRESCRIPTION -->
+<!-- PRESCRIPTION FIX -->
 <div class="section">
   Prescription:
-  <textarea id="prescription"></textarea>
+  <textarea id="prescription" rows="3" placeholder="Type prescription here..."></textarea>
 </div>
 
 <!-- REFERRED -->
 <div class="section">
   Referred by:
-  <input id="referred">
+  <input id="referred" class="inline-input">
 </div>
 
 <!-- FOLLOW UP -->
 <div class="section">
   Follow up check-up:
-  <input id="followup">
+  <input id="followup" class="inline-input">
 </div>
 
 <!-- FOOTER -->
@@ -158,7 +189,7 @@ textarea, input, select {
   PTR NO: 2165087
 </div>
 
-<br><br>
+<br>
 
 <button onclick="save()">Save</button>
 
@@ -172,7 +203,6 @@ const row = new URLSearchParams(location.search).get("row");
 fetch(API_URL)
 .then(res=>res.json())
 .then(data=>{
-
   let r = data[row-1];
 
   document.getElementById("name").innerText = r[2];
@@ -185,7 +215,6 @@ fetch(API_URL)
   document.getElementById("prescription").value = r[16] || "";
   document.getElementById("followup").value = r[17] || "";
   document.getElementById("referred").value = r[18] || "";
-
 });
 
 function save(){
