@@ -274,6 +274,29 @@ function loadDashboard(email){
 }
 
 </script>
+<script>
+
+function showLogin(){
+  console.log("Login clicked"); // debug
+
+  document.getElementById("choiceBox").style.display = "none";
+  document.getElementById("loginBox").style.display = "block";
+}
+
+function showForm(){
+  console.log("Create clicked"); // debug
+
+  document.getElementById("choiceBox").style.display = "none";
+  document.getElementById("formBox").style.display = "block";
+}
+
+function back(){
+  document.getElementById("choiceBox").style.display = "flex";
+  document.getElementById("loginBox").style.display = "none";
+  document.getElementById("formBox").style.display = "none";
+}
+
+</script>
 
 </body>
 </html>
