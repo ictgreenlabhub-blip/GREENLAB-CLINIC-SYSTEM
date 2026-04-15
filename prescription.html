@@ -4,23 +4,85 @@
 <title>Prescription</title>
 
 <style>
-body { font-family:Arial; background:#f4f6f9; }
-.paper {
-  width:800px; margin:auto;
-  background:white; padding:30px;
+body {
+  font-family: Arial;
+  background:#f4f6f9;
 }
-input, textarea, select {
+
+/* PAPER */
+.paper {
+  width: 800px;
+  margin: auto;
+  background: white;
+  padding: 30px 40px;
+  position: relative;
+}
+
+/* HEADER */
+.header {
+  display:flex;
+  align-items:center;
+}
+
+.logo {
+  width:80px;
+  margin-right:10px;
+}
+
+.clinic-text {
+  font-size:13px;
+}
+
+.clinic-title {
+  font-weight:bold;
+  color:#2e7d32;
+  font-size:16px;
+}
+
+/* LINE TEXT */
+.line {
+  border-bottom:1px solid black;
+  display:inline-block;
+  min-width:150px;
+}
+
+/* ROW */
+.row {
+  margin-top:15px;
+  font-size:14px;
+}
+
+/* RX WATERMARK */
+.rx {
+  position:absolute;
+  font-size:100px;
+  color:#ccc;
+  top:180px;
+  left:50px;
+  opacity:0.3;
+}
+
+/* SECTION */
+.section {
+  margin-top:30px;
+  font-size:14px;
+}
+
+/* INPUT */
+textarea, input, select {
   width:100%;
   border:none;
-  border-bottom:1px solid black;
-  margin-bottom:10px;
+  outline:none;
+  font-size:14px;
 }
-textarea { height:80px; }
-button {
-  padding:10px;
-  background:#16a395;
-  color:white;
-  border:none;
+
+/* FOOTER */
+.footer {
+  position:absolute;
+  bottom:40px;
+  right:40px;
+  text-align:left;
+  font-size:12px;
 }
 </style>
 
@@ -30,36 +92,73 @@ button {
 
 <div class="paper">
 
-<h2>GREENLAB CLINIC</h2>
+<!-- HEADER -->
+<div class="header">
+  <img src="Greenlab-logo.png" class="logo">
+  <div class="clinic-text">
+    <div class="clinic-title">GREEN LAB CLINIC AND WELLNESS HUB</div>
+    OWNED AND OPERATED BY TGM GREEN MEDICAL CORP.<br>
+    Purok 4, Apokon Tagum City, Davao del Norte<br>
+    Globe: 0905-240-6557 Tel No: 084-655-0783<br>
+    Email Address: greenlabhub@gmail.com
+  </div>
+</div>
 
-<p>
-Name: <span id="name"></span><br>
-Age: <span id="age"></span><br>
-Sex: <span id="sex"></span><br>
-Address: <span id="address"></span><br>
-Date: <span id="date"></span>
-</p>
+<!-- INFO -->
+<div class="row">
+  Patient Name: <span class="line" id="name"></span>
+  &nbsp;&nbsp;
+  Age: <span class="line" id="age"></span>
+  &nbsp;&nbsp;
+  Sex: <span class="line" id="sex"></span>
+</div>
 
-<hr>
+<div class="row">
+  Address: <span class="line" style="min-width:300px" id="address"></span>
+  &nbsp;&nbsp;
+  Date: <span class="line" id="date"></span>
+</div>
 
-<h3>Procedure</h3>
-<select id="procedure">
-<option>X-RAY</option>
-<option>LABORATORY</option>
-<option>ULTRASOUND</option>
-<option>ECG</option>
-</select>
+<!-- RX -->
+<div class="rx">Rx</div>
 
-<h3>Prescription</h3>
-<textarea id="prescription"></textarea>
+<!-- PROCEDURE -->
+<div class="section">
+  Procedure:
+  <select id="procedure">
+    <option>X-RAY</option>
+    <option>LABORATORY</option>
+    <option>ULTRASOUND</option>
+    <option>ECG</option>
+  </select>
+</div>
 
-<h3>Follow Up</h3>
-<input id="followup">
+<!-- PRESCRIPTION -->
+<div class="section">
+  Prescription:
+  <textarea id="prescription"></textarea>
+</div>
 
-<h3>Referred By</h3>
-<input id="referred">
+<!-- REFERRED -->
+<div class="section">
+  Referred by:
+  <input id="referred">
+</div>
 
-<br>
+<!-- FOLLOW UP -->
+<div class="section">
+  Follow up check-up:
+  <input id="followup">
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  Dr. AYA DANIKA A. ALTERADO MD<br>
+  LIC NO: 0142226<br>
+  PTR NO: 2165087
+</div>
+
+<br><br>
 
 <button onclick="save()">Save</button>
 
@@ -80,12 +179,12 @@ fetch(API_URL)
   document.getElementById("age").innerText = computeAge(r[4]);
   document.getElementById("sex").innerText = r[6];
   document.getElementById("address").innerText = r[3];
-  document.getElementById("date").innerText = new Date().toLocaleDateString();
+  document.getElementById("date").innerText = formatDate(new Date());
 
-  document.getElementById("procedure").value = r[8]||"";
-  document.getElementById("prescription").value = r[16]||"";
-  document.getElementById("followup").value = r[17]||"";
-  document.getElementById("referred").value = r[18]||"";
+  document.getElementById("procedure").value = r[8] || "";
+  document.getElementById("prescription").value = r[16] || "";
+  document.getElementById("followup").value = r[17] || "";
+  document.getElementById("referred").value = r[18] || "";
 
 });
 
@@ -107,6 +206,14 @@ function computeAge(b){
   if(!b) return "";
   let d=new Date(b);
   return new Date().getFullYear()-d.getFullYear();
+}
+
+function formatDate(d){
+  return d.toLocaleDateString("en-PH",{
+    year:"numeric",
+    month:"short",
+    day:"numeric"
+  });
 }
 
 </script>
