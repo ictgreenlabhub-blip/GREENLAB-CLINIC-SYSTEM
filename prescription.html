@@ -201,42 +201,67 @@ select{
 /* 🔥 👉 DITO MO ILALAGAY APPS SCRIPT URL */
 const API_URL = "https://script.google.com/macros/s/AKfycbxFOQixOtBwLDwCoaxFAhwHorFuQeLNxuvXUtmlP5N-8GMR3tfDqNDMwjmChKSU7_TScg/exec";
 
-/* AUTO LOAD DATA */
+/* GET ROW FROM URL */
 const params = new URLSearchParams(window.location.search);
+const row = params.get("row");
 
-document.getElementById("name").innerText = params.get("name") || "";
-document.getElementById("age").innerText = params.get("age") || "";
-document.getElementById("sex").innerText = params.get("sex") || "";
-document.getElementById("address").innerText = params.get("address") || "";
+/* ================= AUTO FILL ================= */
+fetch(API_URL)
+.then(res => res.json())
+.then(data => {
 
-/* DATE */
-document.getElementById("date").innerText = new Date().toLocaleDateString();
+  let r = data[row - 1];
 
-/* SAVE FUNCTION */
+  // BASIC INFO
+  document.getElementById("name").innerText = r[2] || "";
+  document.getElementById("age").innerText = computeAge(r[4]);
+  document.getElementById("sex").innerText = r[6] || "";
+  document.getElementById("address").innerText = r[3] || "";
+
+  // DATE TODAY
+  document.getElementById("date").innerText =
+    new Date().toLocaleDateString("en-PH");
+
+  // EXISTING VALUES (kung may laman na)
+  document.getElementById("procedure").value = r[8] || "";
+  document.getElementById("prescription").value = r[16] || "";
+  document.getElementById("followup").value = r[17] || "";
+  document.getElementById("referred").value = r[18] || "";
+
+});
+
+
+/* ================= AGE ================= */
+function computeAge(bday){
+  if(!bday) return "";
+  let d = new Date(bday);
+  if(isNaN(d)) return "";
+  return new Date().getFullYear() - d.getFullYear();
+}
+
+
+/* ================= SAVE ================= */
 function savePrescription(){
-
-  const data = {
-    name: document.getElementById("name").innerText,
-    age: document.getElementById("age").innerText,
-    sex: document.getElementById("sex").innerText,
-    address: document.getElementById("address").innerText,
-    procedure: document.getElementById("procedure").value,
-    prescription: document.getElementById("prescription").value,
-    referred: document.getElementById("referred").value,
-    followup: document.getElementById("followup").value
-  };
 
   fetch(API_URL,{
     method:"POST",
     body: JSON.stringify({
-      action:"savePrescription",
-      data:data
+      action:"doctorSave",
+      row: row,
+      procedure: document.getElementById("procedure").value,
+      prescription: document.getElementById("prescription").value,
+      followup: document.getElementById("followup").value,
+      referred: document.getElementById("referred").value
     })
   })
-  .then(res=>res.text())
-  .then(res=>{
+  .then(res => res.text())
+  .then(res => {
     alert("Saved successfully!");
     console.log(res);
+  })
+  .catch(err => {
+    alert("Error saving");
+    console.error(err);
   });
 
 }
