@@ -52,6 +52,7 @@ body {
   background:white;
   padding:20px;
   border-radius:15px;
+  overflow-x:auto;
 }
 
 /* TABLE */
@@ -59,12 +60,18 @@ table {
   font-size:12px;
   width:100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 th, td {
-  padding:4px 6px;
-  white-space:nowrap;
-  text-align:left;
+  padding:6px;
+  text-align:lest;
+  word-wrap: break-word;
+}
+td {
+  max-width:120px;
+  overflow:hidden;
+  text-overflow: ellipsis;
 }
 
 td {
@@ -131,7 +138,7 @@ a {
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbwTltnoQsGt4DJHyAh5BPkJYBSy9_LcFjt2_EZB3kSdIjAYk2S9nQXz0VqfeQOjslhe5g/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwW9d0erk2e-efj4n9dQIGqKQqlQVf9A1-K9bY5jlxruRU5nDxpwsMSSRYWa2KdhL0X5w/exec";
 
 let patientData = [];
 
