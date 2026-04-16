@@ -99,7 +99,7 @@ input, select{
 <!-- 🔥 HIDDEN FRAME (NO NEW TAB) -->
 <iframe name="hiddenFrame" style="display:none;"></iframe>
 
-<form action="https://script.google.com/macros/s/AKfycbyrWmvulNj3gbpj68tBNcrG8x2hH47NqpY-Aaadb12So38TW8U5XPrWiboaglh6zlhjfA/exec" method="POST" target="hiddenFrame">
+<form action="https://script.google.com/macros/s/AKfycbwlCQ6JZwL4Z0EuOHQTddKOiz-wBfchozjwgEl8_uE9n1gpEn_5f6hzAZIcOjiKMB7Ojg/exec" method="POST" target="hiddenFrame">
 
 <input type="hidden" name="action" value="saveWithPDF">
 <input type="hidden" name="row" id="rowInput">
@@ -170,11 +170,12 @@ input, select{
 <div id="msg" style="color:green; margin-top:10px;"></div>
 
 <!-- FOOTER -->
-<div class="footer">
-  <img src="sign.png" width="120"><br>
-  Dr. AYA DANIKA A. ALTERADO MD<br>
-  LIC NO: 0142226<br>
-  PTR NO: 2165087
+<div class="row">
+  Doctor:
+  <select name="doctor" id="doctor">
+    <option value="doc1">Dr. Aya</option>
+    <option value="doc2">Dr. Juan</option>
+  </select>
 </div>
 
 </div>
@@ -182,7 +183,7 @@ input, select{
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbyrWmvulNj3gbpj68tBNcrG8x2hH47NqpY-Aaadb12So38TW8U5XPrWiboaglh6zlhjfA/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwlCQ6JZwL4Z0EuOHQTddKOiz-wBfchozjwgEl8_uE9n1gpEn_5f6hzAZIcOjiKMB7Ojg/exec";
 
 // GET ROW
 const params = new URLSearchParams(window.location.search);
