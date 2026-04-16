@@ -5,7 +5,6 @@
 <title>Prescription</title>
 
 <style>
-
 body{
   background:#f4f6f9;
   font-family: Arial;
@@ -116,7 +115,6 @@ select{
   border:none;
   cursor:pointer;
 }
-
 </style>
 </head>
 
@@ -130,24 +128,21 @@ select{
     <div class="header-text">
       <div class="clinic-title">GREEN LAB CLINIC AND WELLNESS HUB</div>
       OWNED AND OPERATED BY TGM GREEN MEDICAL CORP.<br>
-      Purok 4, Apokon Tagum City, Davao del Norte<br>
-      Globe: 0905-240-6557 | Tel: 084-655-0783<br>
-      Email Address: greenlabhub@gmail.com
+      Purok 4, Apokon Tagum City<br>
+      Globe: 0905-240-6557<br>
+      Email: greenlabhub@gmail.com
     </div>
   </div>
 
   <!-- INFO -->
   <div class="row">
     Patient Name: <span class="line line-name" id="name"></span>
-    &nbsp;&nbsp;
     Age: <span class="line line-age" id="age"></span>
-    &nbsp;&nbsp;
     Sex: <span class="line line-sex" id="sex"></span>
   </div>
 
   <div class="row">
     Address: <span class="line line-address" id="address"></span>
-    &nbsp;&nbsp;
     Date: <span class="line line-date" id="date"></span>
   </div>
 
@@ -179,12 +174,12 @@ select{
 
   <!-- FOLLOW UP -->
   <div class="section">
-    Follow up check-up:
+    Follow up:
     <input type="text" id="followup" class="inline" style="width:250px;">
   </div>
 
   <!-- BUTTON -->
-  <button class="btn" onclick="savePrescription()">Save</button>
+  <button class="btn" onclick="savePrescription()">💾 Save + PDF</button>
 
   <!-- FOOTER -->
   <div class="footer">
@@ -198,59 +193,51 @@ select{
 
 <script>
 
-/* 🔥 👉 DITO MO ILALAGAY APPS SCRIPT URL */
 const API_URL = "https://script.google.com/macros/s/AKfycbw-sdPvipu6F0PQ1LTzMRoRxAyt23AhSH8e-a2yYsMq2AhLuzuCXkfGBaX5Ly2Au747Aw/exec";
 
-/* GET ROW */
+/* GET DATA FROM URL */
 const params = new URLSearchParams(window.location.search);
-const row = params.get("row");
+
+const name = params.get("name");
+const age = params.get("age");
+const sex = params.get("sex");
+const address = params.get("address");
 
 /* AUTO FILL */
-fetch(API_URL)
-.then(res => res.json())
-.then(data => {
+document.getElementById("name").innerText = name || "";
+document.getElementById("age").innerText = age || "";
+document.getElementById("sex").innerText = sex || "";
+document.getElementById("address").innerText = address || "";
 
-  let r = data[row - 1];
+document.getElementById("date").innerText =
+  new Date().toLocaleDateString("en-PH");
 
-  document.getElementById("name").innerText = r[2] || "";
-  document.getElementById("age").innerText = computeAge(r[4]);
-  document.getElementById("sex").innerText = r[6] || "";
-  document.getElementById("address").innerText = r[3] || "";
+/* AUTO FOCUS */
+document.getElementById("prescription").focus();
 
-  document.getElementById("date").innerText =
-    new Date().toLocaleDateString("en-PH");
-
-  document.getElementById("procedure").value = r[8] || "";
-  document.getElementById("prescription").value = r[16] || "";
-  document.getElementById("followup").value = r[17] || "";
-  document.getElementById("referred").value = r[18] || "";
-
-});
-
-/* AGE */
-function computeAge(bday){
-  if(!bday) return "";
-  let d = new Date(bday);
-  if(isNaN(d)) return "";
-  return new Date().getFullYear() - d.getFullYear();
-}
-
-/* SAVE + PDF */
+/* SAVE */
 function savePrescription(){
 
   fetch(API_URL,{
     method:"POST",
     body: JSON.stringify({
       action:"saveWithPDF",
-      row: row,
+      name: name,
+      age: age,
+      sex: sex,
+      address: address,
       procedure: document.getElementById("procedure").value,
       prescription: document.getElementById("prescription").value,
       followup: document.getElementById("followup").value,
       referred: document.getElementById("referred").value
     })
   })
-  .then(()=>alert("Saved + PDF created!"));
-
+  .then(()=>{
+    alert("✅ Saved + PDF created!");
+  })
+  .catch(()=>{
+    alert("❌ Error saving");
+  });
 }
 
 </script>
