@@ -402,7 +402,6 @@ window.onload = function(){
     .then(res=>res.json())
     .then(data=>{
         patientData = data;
-        
 
         let user = localStorage.getItem("user");
 
@@ -541,8 +540,26 @@ function loadDashboard(email){
     document.getElementById("dashboard").innerHTML = activeHTML + historyHTML;
 }
 
-/* SUBMIT */
-document.getElementById("form").addEventListener("submit", function(e){
+/* ================= CONSULTATION POPUP ================= */
+
+function openConsultation(){
+    let user = localStorage.getItem("user");
+
+    if(!user){
+        alert("Please login first");
+        return;
+    }
+
+    document.getElementById("consultEmail").value = user;
+    document.getElementById("consultModal").style.display = "block";
+}
+
+function closeConsultation(){
+    document.getElementById("consultModal").style.display = "none";
+}
+
+/* SUBMIT CONSULTATION */
+document.getElementById("consultForm").addEventListener("submit", function(e){
     e.preventDefault();
 
     let formData = new FormData(this);
@@ -552,10 +569,38 @@ document.getElementById("form").addEventListener("submit", function(e){
         body:formData
     })
     .then(()=>{
-        document.getElementById("msg").innerHTML="✅ Submitted!";
+        document.getElementById("consultMsg").innerHTML = "✅ Submitted!";
         this.reset();
+
+        setTimeout(()=>{
+            closeConsultation();
+
+            // reload dashboard after submit
+            let user = localStorage.getItem("user");
+            if(user) loadDashboard(user);
+
+        },1000);
     });
 });
+
+/* OLD FORM SUBMIT (SAFE CHECK) */
+let mainForm = document.getElementById("form");
+if(mainForm){
+    mainForm.addEventListener("submit", function(e){
+        e.preventDefault();
+
+        let formData = new FormData(this);
+
+        fetch(API_URL,{
+            method:"POST",
+            body:formData
+        })
+        .then(()=>{
+            document.getElementById("msg").innerHTML="✅ Submitted!";
+            this.reset();
+        });
+    });
+}
 
 /* PROFILE DROPDOWN */
 function toggleProfile(){
