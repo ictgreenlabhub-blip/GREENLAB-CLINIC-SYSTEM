@@ -10,51 +10,70 @@ body{
   font-family: Arial;
 }
 
+/* PAPER */
 .paper{
   width:8.5in;
   min-height:11in;
   margin:auto;
   background:white;
   padding:40px 60px;
+  position:relative;
 }
 
+/* HEADER */
 .header{
-  text-align:center;
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+
+.logo{
+  width:100px;
 }
 
 .title{
-  font-size:22px;
+  font-size:20px;
   font-weight:bold;
   color:#2e7d32;
 }
 
+.sub{
+  font-size:13px;
+}
+
+/* ROW */
 .row{
-  margin-top:20px;
+  margin-top:15px;
 }
 
-.line{
-  border-bottom:1px solid black;
-  display:inline-block;
-  min-width:200px;
+/* RX WATERMARK */
+.rx{
+  position:absolute;
+  top:300px;
+  left:60px;
+  font-size:120px;
+  color:#ccc;
+  opacity:0.2;
 }
 
+/* INPUT */
 textarea{
   width:100%;
   border:none;
-  border-bottom:1px solid black;
   outline:none;
-  font-size:16px;
+  font-size:15px;
   background:transparent;
 }
 
 input, select{
   border:none;
   border-bottom:1px solid black;
+  font-size:15px;
   outline:none;
-  font-size:16px;
   background:transparent;
 }
 
+/* BUTTON */
 .btn{
   margin-top:30px;
   padding:10px 20px;
@@ -64,9 +83,12 @@ input, select{
   cursor:pointer;
 }
 
+/* FOOTER */
 .footer{
-  margin-top:80px;
-  text-align:right;
+  position:absolute;
+  bottom:60px;
+  right:60px;
+  text-align:center;
 }
 </style>
 
@@ -74,7 +96,10 @@ input, select{
 
 <body>
 
-<form action="https://script.google.com/macros/s/AKfycbyrWmvulNj3gbpj68tBNcrG8x2hH47NqpY-Aaadb12So38TW8U5XPrWiboaglh6zlhjfA/exec" method="POST" target="_blank">
+<!-- 🔥 HIDDEN FRAME (NO NEW TAB) -->
+<iframe name="hiddenFrame" style="display:none;"></iframe>
+
+<form action="https://script.google.com/macros/s/AKfycbyrWmvulNj3gbpj68tBNcrG8x2hH47NqpY-Aaadb12So38TW8U5XPrWiboaglh6zlhjfA/exec" method="POST" target="hiddenFrame">
 
 <input type="hidden" name="action" value="saveWithPDF">
 <input type="hidden" name="row" id="rowInput">
@@ -83,27 +108,36 @@ input, select{
 
 <!-- HEADER -->
 <div class="header">
-  <div class="title">GREEN LAB CLINIC AND WELLNESS HUB</div>
-  Purok 4, Apokon Tagum City<br>
-  Globe: 0905-240-6557
+  <img src="Greenlab-logo.png" class="logo">
+  <div>
+    <div class="title">GREEN LAB CLINIC AND WELLNESS HUB</div>
+    <div class="sub">
+      Purok 4, Apokon Tagum City<br>
+      Globe: 0905-240-6557<br>
+      greenlabhub@gmail.com
+    </div>
+  </div>
 </div>
 
 <!-- INFO -->
 <div class="row">
-  Patient Name: <span id="name"></span> |
-  Age: <span id="age"></span> |
-  Sex: <span id="sex"></span>
+  Patient Name: <b id="name"></b> |
+  Age: <b id="age"></b> |
+  Sex: <b id="sex"></b>
 </div>
 
 <div class="row">
-  Address: <span id="address"></span> |
-  Date: <span id="date"></span>
+  Address: <b id="address"></b> |
+  Date: <b id="date"></b>
 </div>
+
+<!-- RX -->
+<div class="rx">Rx</div>
 
 <!-- PROCEDURE -->
 <div class="row">
   Procedure:
-  <select name="procedure" id="procedure">
+  <select name="procedure">
     <option>Select</option>
     <option>X-RAY</option>
     <option>LAB</option>
@@ -115,25 +149,29 @@ input, select{
 <!-- PRESCRIPTION -->
 <div class="row">
   Prescription:<br>
-  <textarea name="prescription" id="prescription" rows="5"></textarea>
+  <textarea name="prescription" rows="5"></textarea>
 </div>
 
 <!-- REFERRED -->
 <div class="row">
   Referred by:
-  <input type="text" name="referred" id="referred">
+  <input type="text" name="referred">
 </div>
 
 <!-- FOLLOW UP -->
 <div class="row">
   Follow up:
-  <input type="text" name="followup" id="followup">
+  <input type="text" name="followup">
 </div>
 
 <button type="submit" class="btn">Save + PDF</button>
 
+<!-- SUCCESS MESSAGE -->
+<div id="msg" style="color:green; margin-top:10px;"></div>
+
 <!-- FOOTER -->
 <div class="footer">
+  <img src="sign.png" width="120"><br>
   Dr. AYA DANIKA A. ALTERADO MD<br>
   LIC NO: 0142226<br>
   PTR NO: 2165087
@@ -150,22 +188,24 @@ const API_URL = "https://script.google.com/macros/s/AKfycbyrWmvulNj3gbpj68tBNcrG
 const params = new URLSearchParams(window.location.search);
 const row = params.get("row");
 
-// SET ROW
 document.getElementById("rowInput").value = row;
 
 // LOAD DATA
 fetch(API_URL)
 .then(res=>res.json())
 .then(data=>{
-
-  let r = data[row - 1];
+  let r = data[row-1];
 
   document.getElementById("name").innerText = r[2] || "";
   document.getElementById("age").innerText = computeAge(r[4]);
   document.getElementById("sex").innerText = r[6] || "";
   document.getElementById("address").innerText = r[3] || "";
   document.getElementById("date").innerText = new Date().toLocaleDateString();
+});
 
+// SUCCESS MESSAGE
+document.querySelector("form").addEventListener("submit", function(){
+  document.getElementById("msg").innerHTML = "✅ Saved successfully!";
 });
 
 // AGE
