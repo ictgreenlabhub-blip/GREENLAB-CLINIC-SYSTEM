@@ -67,11 +67,7 @@ th, td {
   padding:6px;
   text-align:lest;
   word-wrap: break-word;
-}
-td {
-  max-width:120px;
-  overflow:hidden;
-  text-overflow: ellipsis;
+
 }
 
 td {
@@ -138,7 +134,7 @@ a {
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbwW9d0erk2e-efj4n9dQIGqKQqlQVf9A1-K9bY5jlxruRU5nDxpwsMSSRYWa2KdhL0X5w/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyicWHQ74qW5wKYBPKKHrXMGKW6DJ04FmcF9SpaN3O3nGqe1fPuMfZfBRGq2hWBnLHLpQ/exec";
 
 let patientData = [];
 
@@ -198,16 +194,17 @@ fetch(API_URL)
       </td>
 
       <!-- PDF -->
-      <td>
-        ${r[19] ? `<a href="${r[19]}" target="_blank">View</a>` : "-"}
+      <td style="display:flex; gap:5px;">
+        ${r[19] ? `<a href="${r[19]}" target="_blank">🧾 RX</a>` : "-"}
+        ${r[21] ? `<a href="${r[21]}" target="_blank">📄 Med</a>` : "-"}
       </td>
 
       <!-- SEND -->
-      <td style="display:flex; gap:5px;">
-        ${r[19] ? `<a href="${r[19]}" target="_blank">🧾 RX</a>` : "-"}
-        ${r[21] ? `<a href="${r[21]}" target="_blank">📄 MedCert</a>` : "-"}
-      </td>
-
+<td>
+  ${r[20] === "SENT"
+    ? `<span style="color:green;font-weight:bold;">SENT</span>`
+    : `<button onclick="sendAll(${i+1})">Send</button>`}
+</td>
       <!-- ✅ FIXED ACTION -->
       <td style="display:flex; gap:5px;">
         <button onclick="openRX(${i+1})">🧾 RX</button>
