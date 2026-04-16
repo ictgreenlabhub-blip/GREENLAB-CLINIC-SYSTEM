@@ -131,7 +131,7 @@ a {
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbz_IJiP5JXhaqfybLkNJiUIblljCKnc9cwUhvF6xNYqRA5t5Ftth5Q0iLEw9HRB6W_wcw/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwTltnoQsGt4DJHyAh5BPkJYBSy9_LcFjt2_EZB3kSdIjAYk2S9nQXz0VqfeQOjslhe5g/exec";
 
 let patientData = [];
 
@@ -196,10 +196,9 @@ fetch(API_URL)
       </td>
 
       <!-- SEND -->
-      <td>
-        ${r[20] === "SENT"
-          ? `<span style="color:green;font-weight:bold;">SENT</span>`
-          : `<button onclick="send(${i+2})">Send</button>`}
+      <td style="display:flex; gap:5px;">
+        ${r[19] ? `<a href="${r[19]}" target="_blank">🧾 RX</a>` : "-"}
+        ${r[21] ? `<a href="${r[21]}" target="_blank">📄 MedCert</a>` : "-"}
       </td>
 
       <!-- ✅ FIXED ACTION -->
