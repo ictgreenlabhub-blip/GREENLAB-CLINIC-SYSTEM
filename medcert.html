@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Medical Certificate</title>
+
+<style>
+body {
+  font-family: Arial;
+  background:#f4f6f9;
+  padding:20px;
+}
+
+/* PAPER */
+.paper {
+  width: 794px; /* A4 */
+  min-height: 1123px;
+  margin:auto;
+  background:white;
+  padding:40px;
+  border-radius:10px;
+}
+
+/* HEADER */
+.header {
+  display:flex;
+  align-items:center;
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.header img {
+  width:80px;
+}
+
+.header-text {
+  text-align:left;
+}
+
+.header-text h2 {
+  margin:0;
+  color:#2e7d32;
+}
+
+.header-text p {
+  margin:0;
+  font-size:12px;
+}
+
+/* TITLE */
+.title {
+  text-align:center;
+  font-weight:bold;
+  text-decoration:underline;
+  margin:20px 0;
+}
+
+/* FORM */
+.row {
+  margin-bottom:15px;
+}
+
+textarea {
+  width:100%;
+  height:80px;
+}
+
+/* BUTTON */
+.btn {
+  background:#16a395;
+  color:white;
+  border:none;
+  padding:10px 15px;
+  border-radius:5px;
+  cursor:pointer;
+}
+
+/* PRINT */
+@media print {
+  body { background:white; }
+  .btn { display:none; }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="paper">
+
+<form id="form">
+
+<!-- HEADER -->
+<div class="header">
+  <img src="Greenlab-logo.png">
+  <div class="header-text">
+    <h2>GREEN LAB CLINIC AND WELLNESS HUB</h2>
+    <p>Purok 4, Apokon Tagum City</p>
+    <p>Globe: 0905-240-6557</p>
+  </div>
+</div>
+
+<!-- TITLE -->
+<div class="title">MEDICAL CERTIFICATE</div>
+
+<!-- DATE -->
+<div class="row">
+  Date: <b id="date"></b>
+</div>
+
+<!-- BODY TEXT -->
+<div class="row">
+  To Whom It May Concern:
+</div>
+
+<div class="row">
+  This is to certify that:
+</div>
+
+<!-- NAME / AGE -->
+<div class="row">
+  Name: <b id="name"></b> &nbsp;&nbsp;
+  Age: <b id="age"></b>
+</div>
+
+<!-- FINDINGS -->
+<div class="row">
+  Findings:
+  <textarea name="findings" required></textarea>
+</div>
+
+<!-- REMARKS -->
+<div class="row">
+  Remarks:
+  <textarea name="remarks"></textarea>
+</div>
+
+<!-- DOCTOR -->
+<div class="row">
+  Doctor:
+  <select name="doctor">
+    <option value="doc1">Dr. Aya</option>
+    <option value="doc2">Dr. Juan</option>
+  </select>
+</div>
+
+<input type="hidden" name="row" id="row">
+
+<button type="submit" class="btn">Generate MedCert</button>
+
+<div id="msg" style="color:green; margin-top:10px;"></div>
+
+</form>
+
+</div>
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbxu8IIlHvOChP_xib9MuuAwrz6rZv-qtcXZl2154NxcrAKzX6n53hcenv8Cy1x5uGW3VA/exec";
+
+// GET DATA FROM URL
+let params = new URLSearchParams(window.location.search);
+
+document.getElementById("row").value = params.get("row");
+document.getElementById("name").innerText = params.get("name") || "";
+document.getElementById("age").innerText = params.get("age") || "";
+
+// DATE
+document.getElementById("date").innerText = new Date().toLocaleDateString();
+
+// SUBMIT
+document.getElementById("form").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  let formData = new FormData(this);
+  formData.append("action", "medcert");
+
+  fetch(API_URL, {
+    method:"POST",
+    body: formData
+  })
+  .then(()=> {
+    document.getElementById("msg").innerHTML = "✅ Medical Certificate Generated!";
+  })
+  .catch(()=>{
+    document.getElementById("msg").innerHTML = "❌ Error";
+  });
+
+});
+
+</script>
+
+</body>
+</html>

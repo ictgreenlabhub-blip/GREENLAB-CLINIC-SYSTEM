@@ -92,7 +92,11 @@ button {
   border-radius:5px;
   cursor:pointer;
 }
-
+button {
+  padding:4px 8px;
+  font-size:11px;
+  border-radius:5px;
+}
 a {
   color:#16a395;
   text-decoration:none;
@@ -199,8 +203,9 @@ fetch(API_URL)
       </td>
 
       <!-- ✅ FIXED ACTION -->
-      <td>
-        <button onclick="openRX(${i+2})">🧾 Prescription</button>
+      <td style="display:flex; gap:5px;">
+        <button onclick="openRX(${i+1})">🧾 RX</button>
+        <button onclick="openMedCert(${i+1})">📄 MedCert</button>
       </td>
 
     </tr>`;
@@ -246,7 +251,17 @@ function send(row){
     alert("❌ Error sending");
   });
 }
+function openMedCert(row){
+  let r = patientData[row];
 
+  let params = new URLSearchParams({
+    row: row,
+    name: r[2] || "",
+    age: computeAge(r[4])
+  });
+
+  window.location.href = "medcert.html?" + params.toString();
+}
 </script>
 
 </body>
