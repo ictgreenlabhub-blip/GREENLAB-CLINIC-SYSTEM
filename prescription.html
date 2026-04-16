@@ -12,10 +12,24 @@ body{
 
 .paper{
   width:8.5in;
-  height:11in;
+  min-height:11in;
   margin:auto;
   background:white;
   padding:40px 60px;
+}
+
+.header{
+  text-align:center;
+}
+
+.title{
+  font-size:22px;
+  font-weight:bold;
+  color:#2e7d32;
+}
+
+.row{
+  margin-top:20px;
 }
 
 .line{
@@ -24,12 +38,21 @@ body{
   min-width:200px;
 }
 
-textarea, input, select{
+textarea{
+  width:100%;
   border:none;
   border-bottom:1px solid black;
-  background:transparent;
+  outline:none;
   font-size:16px;
-  width:250px;
+  background:transparent;
+}
+
+input, select{
+  border:none;
+  border-bottom:1px solid black;
+  outline:none;
+  font-size:16px;
+  background:transparent;
 }
 
 .btn{
@@ -40,6 +63,11 @@ textarea, input, select{
   border:none;
   cursor:pointer;
 }
+
+.footer{
+  margin-top:80px;
+  text-align:right;
+}
 </style>
 
 </head>
@@ -48,66 +76,81 @@ textarea, input, select{
 
 <form action="https://script.google.com/macros/s/AKfycbyrWmvulNj3gbpj68tBNcrG8x2hH47NqpY-Aaadb12So38TW8U5XPrWiboaglh6zlhjfA/exec" method="POST" target="_blank">
 
-<!-- HIDDEN -->
 <input type="hidden" name="action" value="saveWithPDF">
 <input type="hidden" name="row" id="rowInput">
 
 <div class="paper">
 
-<h2>GREEN LAB CLINIC AND WELLNESS HUB</h2>
+<!-- HEADER -->
+<div class="header">
+  <div class="title">GREEN LAB CLINIC AND WELLNESS HUB</div>
+  Purok 4, Apokon Tagum City<br>
+  Globe: 0905-240-6557
+</div>
 
-<p>
-Patient Name: <span id="name"></span> |
-Age: <span id="age"></span> |
-Sex: <span id="sex"></span>
-</p>
+<!-- INFO -->
+<div class="row">
+  Patient Name: <span id="name"></span> |
+  Age: <span id="age"></span> |
+  Sex: <span id="sex"></span>
+</div>
 
-<p>
-Address: <span id="address"></span> |
-Date: <span id="date"></span>
-</p>
+<div class="row">
+  Address: <span id="address"></span> |
+  Date: <span id="date"></span>
+</div>
 
-<p>
-Procedure:
-<select name="procedure" id="procedure">
-<option>Select</option>
-<option>X-RAY</option>
-<option>LAB</option>
-<option>ULTRASOUND</option>
-<option>ECG</option>
-</select>
-</p>
+<!-- PROCEDURE -->
+<div class="row">
+  Procedure:
+  <select name="procedure" id="procedure">
+    <option>Select</option>
+    <option>X-RAY</option>
+    <option>LAB</option>
+    <option>ULTRASOUND</option>
+    <option>ECG</option>
+  </select>
+</div>
 
-<p>
-Prescription:<br>
-<textarea name="prescription" id="prescription" rows="5"></textarea>
-</p>
+<!-- PRESCRIPTION -->
+<div class="row">
+  Prescription:<br>
+  <textarea name="prescription" id="prescription" rows="5"></textarea>
+</div>
 
-<p>
-Referred by:
-<input type="text" name="referred" id="referred">
-</p>
+<!-- REFERRED -->
+<div class="row">
+  Referred by:
+  <input type="text" name="referred" id="referred">
+</div>
 
-<p>
-Follow up:
-<input type="text" name="followup" id="followup">
-</p>
+<!-- FOLLOW UP -->
+<div class="row">
+  Follow up:
+  <input type="text" name="followup" id="followup">
+</div>
 
 <button type="submit" class="btn">Save + PDF</button>
+
+<!-- FOOTER -->
+<div class="footer">
+  Dr. AYA DANIKA A. ALTERADO MD<br>
+  LIC NO: 0142226<br>
+  PTR NO: 2165087
+</div>
 
 </div>
 </form>
 
 <script>
 
-// 👉 PALITAN MO ITO (same URL sa Apps Script mo)
 const API_URL = "https://script.google.com/macros/s/AKfycbyrWmvulNj3gbpj68tBNcrG8x2hH47NqpY-Aaadb12So38TW8U5XPrWiboaglh6zlhjfA/exec";
 
-// GET ROW FROM URL
+// GET ROW
 const params = new URLSearchParams(window.location.search);
 const row = params.get("row");
 
-// SET ROW SA FORM
+// SET ROW
 document.getElementById("rowInput").value = row;
 
 // LOAD DATA
@@ -125,7 +168,7 @@ fetch(API_URL)
 
 });
 
-// AGE FUNCTION
+// AGE
 function computeAge(bday){
   if(!bday) return "";
   let d = new Date(bday);
