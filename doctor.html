@@ -31,13 +31,14 @@ body {
 .menu a:hover {
   background:rgba(255,255,255,0.2);
 }
+
 .logo {
-    text-align: center;
-    margin-bottom: 80px;
+  text-align: center;
+  margin-bottom: 80px;
 }
 
 .logo img {
-    width: 120px;
+  width: 120px;
 }
 
 /* CONTENT */
@@ -53,7 +54,7 @@ body {
   border-radius:15px;
 }
 
-/* TABLE FIX */
+/* TABLE */
 table {
   font-size:12px;
   width:100%;
@@ -103,15 +104,15 @@ a {
 <body>
 
 <div class="sidebar">
-    <div class="logo">
-        <img src="Green-Logo.png">
-    </div>
+  <div class="logo">
+    <img src="Green-Logo.png">
+  </div>
 
-    <div class="menu">
-        <a href="patient.html">🧑 GreebLab Patient Portal</a>
-        <a href="doctor.html">👨‍⚕️ Doctor</a>
-        <a href="secretary.html">📋 Secretary</a>
-    </div>
+  <div class="menu">
+    <a href="patient.html">🧑 GreenLab Patient Portal</a>
+    <a href="doctor.html">👨‍⚕️ Doctor</a>
+    <a href="secretary.html">📋 Secretary</a>
+  </div>
 </div>
 
 <div class="content">
@@ -126,7 +127,7 @@ a {
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbzDqJLYio6jSiMVzfOYW8dweVHfmbeewQizivRAXb6vXvDS4V4JmwoHP8E12fgICGKHxQ/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyrWmvulNj3gbpj68tBNcrG8x2hH47NqpY-Aaadb12So38TW8U5XPrWiboaglh6zlhjfA/exec";
 
 let patientData = [];
 
@@ -197,7 +198,7 @@ fetch(API_URL)
           : `<button onclick="send(${i+1})">Send</button>`}
       </td>
 
-      <!-- ACTION -->
+      <!-- ✅ FIXED ACTION -->
       <td>
         <button onclick="openRX(${i+1})">🧾 Prescription</button>
       </td>
@@ -210,20 +211,9 @@ fetch(API_URL)
 });
 
 
-/* OPEN PRESCRIPTION (AUTO PASS DATA) */
+/* ✅ FIXED OPEN PRESCRIPTION */
 function openRX(row){
-  let r = patientData[row];
-
-  let params = new URLSearchParams({
-    name: r[2] || "",
-    age: computeAge(r[4]),
-    sex: r[6] || "",
-    weight: r[9] || "",
-    temp: r[10] || "",
-    bp: r[11] || ""
-  });
-
-  window.location.href = "prescription.html?" + params.toString();
+  window.location.href = "prescription.html?row=" + row;
 }
 
 
@@ -256,7 +246,6 @@ function send(row){
     alert("❌ Error sending");
   });
 }
-
 
 </script>
 
