@@ -195,12 +195,12 @@ fetch(API_URL)
       <td>
         ${r[20] === "SENT"
           ? `<span style="color:green;font-weight:bold;">SENT</span>`
-          : `<button onclick="send(${i+1})">Send</button>`}
+          : `<button onclick="send(${i+2})">Send</button>`}
       </td>
 
       <!-- ✅ FIXED ACTION -->
       <td>
-        <button onclick="openRX(${i+1})">🧾 Prescription</button>
+        <button onclick="openRX(${i+2})">🧾 Prescription</button>
       </td>
 
     </tr>`;
