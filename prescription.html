@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>Prescription</title>
@@ -16,95 +16,20 @@ body{
   margin:auto;
   background:white;
   padding:40px 60px;
-  box-sizing:border-box;
-  position:relative;
-}
-
-.header{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:20px;
-}
-
-.logo{
-  width:120px;
-}
-
-.header-text{
-  font-size:14px;
-  line-height:1.4;
-}
-
-.clinic-title{
-  font-size:22px;
-  font-weight:bold;
-  color:#2e7d32;
-}
-
-.row{
-  margin-top:20px;
-  font-size:16px;
 }
 
 .line{
   border-bottom:1px solid black;
   display:inline-block;
+  min-width:200px;
 }
 
-.line-name{ min-width:220px; }
-.line-age{ min-width:70px; }
-.line-sex{ min-width:80px; }
-.line-date{ min-width:140px; }
-.line-address{ min-width:300px; }
-
-.rx{
-  position:absolute;
-  top:300px;
-  left:60px;
-  font-size:140px;
-  color:#ccc;
-  opacity:0.2;
-}
-
-.section{
-  margin-top:25px;
-  font-size:16px;
-}
-
-.inline{
+textarea, input, select{
   border:none;
   border-bottom:1px solid black;
-  outline:none;
-  font-size:16px;
   background:transparent;
-}
-
-textarea{
-  width:100%;
-  border:none;
-  outline:none;
   font-size:16px;
-  resize:none;
-  background:transparent;
-}
-
-select{
-  border:none;
-  border-bottom:1px solid black;
-  font-size:16px;
-  outline:none;
-}
-
-.footer{
-  position:absolute;
-  bottom:50px;
-  right:60px;
-  text-align:center;
-}
-
-.signature{
-  width:150px;
+  width:250px;
 }
 
 .btn{
@@ -116,128 +41,96 @@ select{
   cursor:pointer;
 }
 </style>
+
 </head>
 
 <body>
 
+<form action="https://script.google.com/macros/s/AKfycbyrWmvulNj3gbpj68tBNcrG8x2hH47NqpY-Aaadb12So38TW8U5XPrWiboaglh6zlhjfA/exec" method="POST" target="_blank">
+
+<!-- HIDDEN -->
+<input type="hidden" name="action" value="saveWithPDF">
+<input type="hidden" name="row" id="rowInput">
+
 <div class="paper">
 
-  <!-- HEADER -->
-  <div class="header">
-    <img src="Greenlab-logo.png" class="logo">
-    <div class="header-text">
-      <div class="clinic-title">GREEN LAB CLINIC AND WELLNESS HUB</div>
-      OWNED AND OPERATED BY TGM GREEN MEDICAL CORP.<br>
-      Purok 4, Apokon Tagum City<br>
-      Globe: 0905-240-6557<br>
-      Email: greenlabhub@gmail.com
-    </div>
-  </div>
+<h2>GREEN LAB CLINIC AND WELLNESS HUB</h2>
 
-  <!-- INFO -->
-  <div class="row">
-    Patient Name: <span class="line line-name" id="name"></span>
-    Age: <span class="line line-age" id="age"></span>
-    Sex: <span class="line line-sex" id="sex"></span>
-  </div>
+<p>
+Patient Name: <span id="name"></span> |
+Age: <span id="age"></span> |
+Sex: <span id="sex"></span>
+</p>
 
-  <div class="row">
-    Address: <span class="line line-address" id="address"></span>
-    Date: <span class="line line-date" id="date"></span>
-  </div>
+<p>
+Address: <span id="address"></span> |
+Date: <span id="date"></span>
+</p>
 
-  <div class="rx">Rx</div>
+<p>
+Procedure:
+<select name="procedure" id="procedure">
+<option>Select</option>
+<option>X-RAY</option>
+<option>LAB</option>
+<option>ULTRASOUND</option>
+<option>ECG</option>
+</select>
+</p>
 
-  <!-- PROCEDURE -->
-  <div class="section">
-    Procedure:
-    <select id="procedure">
-      <option>Select</option>
-      <option>X-RAY</option>
-      <option>LABORATORY</option>
-      <option>ULTRASOUND</option>
-      <option>ECG</option>
-    </select>
-  </div>
+<p>
+Prescription:<br>
+<textarea name="prescription" id="prescription" rows="5"></textarea>
+</p>
 
-  <!-- PRESCRIPTION -->
-  <div class="section">
-    Prescription:<br>
-    <textarea id="prescription" rows="6"></textarea>
-  </div>
+<p>
+Referred by:
+<input type="text" name="referred" id="referred">
+</p>
 
-  <!-- REFERRED -->
-  <div class="section">
-    Referred by:
-    <input type="text" id="referred" class="inline" style="width:250px;">
-  </div>
+<p>
+Follow up:
+<input type="text" name="followup" id="followup">
+</p>
 
-  <!-- FOLLOW UP -->
-  <div class="section">
-    Follow up:
-    <input type="text" id="followup" class="inline" style="width:250px;">
-  </div>
-
-  <!-- BUTTON -->
-  <button class="btn" onclick="savePrescription()">💾 Save + PDF</button>
-
-  <!-- FOOTER -->
-  <div class="footer">
-    <img src="sign.png" class="signature"><br>
-    Dr. AYA DANIKA A. ALTERADO MD<br>
-    LIC NO: 0142226<br>
-    PTR NO: 2165087
-  </div>
+<button type="submit" class="btn">Save + PDF</button>
 
 </div>
+</form>
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbzDqJLYio6jSiMVzfOYW8dweVHfmbeewQizivRAXb6vXvDS4V4JmwoHP8E12fgICGKHxQ/exec";
+// 👉 PALITAN MO ITO (same URL sa Apps Script mo)
+const API_URL = "https://script.google.com/macros/s/AKfycbyrWmvulNj3gbpj68tBNcrG8x2hH47NqpY-Aaadb12So38TW8U5XPrWiboaglh6zlhjfA/exec";
 
-/* GET DATA FROM URL */
+// GET ROW FROM URL
 const params = new URLSearchParams(window.location.search);
+const row = params.get("row");
 
-const name = params.get("name");
-const age = params.get("age");
-const sex = params.get("sex");
-const address = params.get("address");
+// SET ROW SA FORM
+document.getElementById("rowInput").value = row;
 
-/* AUTO FILL */
-document.getElementById("name").innerText = name || "";
-document.getElementById("age").innerText = age || "";
-document.getElementById("sex").innerText = sex || "";
-document.getElementById("address").innerText = address || "";
+// LOAD DATA
+fetch(API_URL)
+.then(res=>res.json())
+.then(data=>{
 
-document.getElementById("date").innerText =
-  new Date().toLocaleDateString("en-PH");
+  let r = data[row - 1];
 
-/* AUTO FOCUS */
-document.getElementById("prescription").focus();
+  document.getElementById("name").innerText = r[2] || "";
+  document.getElementById("age").innerText = computeAge(r[4]);
+  document.getElementById("sex").innerText = r[6] || "";
+  document.getElementById("address").innerText = r[3] || "";
+  document.getElementById("date").innerText = new Date().toLocaleDateString();
 
-/* SAVE */
-function savePrescription(){
+});
 
-  fetch(API_URL,{
-    method:"POST",
-    body: JSON.stringify({
-      action:"saveWithPDF",
-      name: name,
-      age: age,
-      sex: sex,
-      address: address,
-      procedure: document.getElementById("procedure").value,
-      prescription: document.getElementById("prescription").value,
-      followup: document.getElementById("followup").value,
-      referred: document.getElementById("referred").value
-    })
-  })
-  .then(()=>{
-    alert("✅ Saved + PDF created!");
-  })
-  .catch(()=>{
-    alert("❌ Error saving");
-  });
+// AGE FUNCTION
+function computeAge(bday){
+  if(!bday) return "";
+  let d = new Date(bday);
+  if(isNaN(d)) return "";
+  return new Date().getFullYear() - d.getFullYear();
 }
 
 </script>
