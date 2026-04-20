@@ -1,86 +1,191 @@
 <!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Clinic System</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"><style>
-body {
-    margin: 0;
-    font-family: Arial;
-    background: #f4f6f9;
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GreenLab Portal</title><style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial;
 }
 
-/* SIDEBAR */
-.sidebar {
-    width: 250px;
-    height: 100vh;
-    position: fixed;
-    background: linear-gradient(180deg, #c4e479, #16a395);
-    padding: 25px 15px;
-    color: rgb(26, 10, 10);
+body{
+  height:100vh;
+  overflow:hidden;
+  background: linear-gradient(135deg,#2cc4a3,#167f8c);
 }
 
-/* LOGO */
-.logo {
-    text-align: center;
-    margin-bottom: 80x;
+/* CONTAINER */
+.container{
+  width:100%;
+  height:100%;
+  position:relative;
+  overflow:hidden;
 }
 
-.logo img {
-    width: 120px;
+/* WHITE SIDE */
+.white{
+  width:40%;
+  height:100%;
+  position:absolute;
+  left:0;
+  top:0;
+  background:white;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  transition:0.8s ease;
+  z-index:2;
 }
 
-/* MENU */
-.menu {
-    margin-top: 20px;
+.white img{
+  width:260px;
 }
 
-.menu a {
-    display: block;
-    padding: 15px 15px;
-    margin-bottom: 12px;
-    border-radius: 10px;
-    color: rgb(20, 1, 1);
-    text-decoration: none;
-    font-weight: 500;
-    transition: 0.3s;
+/* BLUE SIDE */
+.blue{
+  width:60%;
+  height:100%;
+  position:absolute;
+  right:0;
+  top:0;
+
+  background: linear-gradient(135deg,#2cc4a3,#167f8c);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  color:white;
+
+  transition:0.8s ease;
 }
 
-.menu a:hover {
-    background: rgba(255,255,255,0.2);
-    padding-left: 20px;
+/* CURVE */
+.blue::before{
+  content:"";
+  position:absolute;
+  left:-120px;
+  top:0;
+  width:250px;
+  height:100%;
+  background:#2cc4a3;
+  border-radius:0 120px 120px 0;
+  transition:0.8s;
 }
 
-/* CONTENT */
-.content {
-    margin-left: 270px;
-    padding: 50px;
+/* TEXT */
+.title{
+  font-size:30px;
+  margin-bottom:10px;
 }
 
-/* MAIN BOX */
-.main-box {
-    background: white;
-    padding: 50px;
-    border-radius: 15px;
-    text-align: center;
-    box-shadow: 0 3px 15px rgba(68, 45, 45, 0.1);
+.subtitle{
+  margin-bottom:30px;
 }
 
-.main-box h2 {
-    font-weight: bold;
+/* BUTTON */
+.btn{
+  padding:15px 45px;
+  border:none;
+  border-radius:30px;
+  background:white;
+  color:#167f8c;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
 }
-</style></head><body><!-- SIDEBAR --><div class="sidebar"><div class="logo">
-    <img src="Green-Logo.png">
-</div>
 
-<div class="menu">
-    <a href="patient.html">🧑 GreebLab Patient Portal</a>
-    <a href="doctor.html">👨‍⚕️ Doctor View</a>
-    <a href="secretary.html">📋 Secretary View</a>
-</div>
+.btn:hover{
+  transform:scale(1.1);
+}
 
-</div><!-- CONTENT --><div class="content"><div class="main-box">
-    <h2>GREENLAB CLINIC & WELLNESS HUB</h2>
-    <p class="text-muted">Select menu on the left to continue</p>
-</div>
+/* SWITCH */
+.switch{
+  position:absolute;
+  top:50%;
+  left:-50px;
+  transform:translateY(-50%);
+  background:#1e5f74;
+  color:white;
+  padding:10px 20px;
+  border-radius:20px;
+  cursor:pointer;
+  z-index:5;
+}
 
-</div></body>
+/* ========================= */
+/* 🔥 ACTIVE STATE (SWAP) */
+/* ========================= */
+
+/* WHITE → RIGHT */
+.container.active .white{
+  left:60%;
+}
+
+/* BLUE → LEFT */
+.container.active .blue{
+  right:40%;
+}
+
+/* CURVE FLIP */
+.container.active .blue::before{
+  left:auto;
+  right:-120px;
+  border-radius:120px 0 0 120px;
+}
+
+/* SWITCH MOVE */
+.container.active .switch{
+  left:auto;
+  right:-50px;
+}
+
+</style></head><body><div class="container" id="container"> <!-- WHITE --> <div class="white">
+    <img src="img/Green-Logo.png">
+  </div> <!-- BLUE --> <div class="blue"><div class="switch" onclick="toggle()">Switch</div>
+
+<h1 class="title" id="title">Welcome to GreenLab Clinic</h1>
+<p class="subtitle" id="sub">& Wellness Hub</p>
+
+<button class="btn" id="btn" onclick="go()">Create Form</button>
+
+  </div></div><script>
+
+let isLogin = false;
+
+function toggle(){
+
+  const container = document.getElementById("container");
+  const title = document.getElementById("title");
+  const sub = document.getElementById("sub");
+  const btn = document.getElementById("btn");
+
+  container.classList.toggle("active");
+
+  isLogin = !isLogin;
+
+  if(isLogin){
+    title.innerText = "Welcome Back!";
+    sub.innerText = "Login to your account";
+    btn.innerText = "Login";
+  }else{
+    title.innerText = "Welcome to GreenLab Clinic";
+    sub.innerText = "& Wellness Hub";
+    btn.innerText = "Create Form";
+  }
+}
+
+function go(){
+  if(isLogin){
+    window.location.href = "login.html";
+  }else{
+    window.location.href = "patient.html?form=true";
+  }
+}
+
+</script></body>
 </html>

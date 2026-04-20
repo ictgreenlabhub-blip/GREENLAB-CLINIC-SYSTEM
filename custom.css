@@ -1,0 +1,435 @@
+
+body {
+  margin:0;
+  font-family:Arial;
+  background:#ffffff;
+}
+
+/* HEADER */
+.header{
+  height:60px;
+  background:#22324e;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+
+}
+.header-tittle{
+  transition:0.3s;
+}
+.header-tittle.shift{
+  transform:translate(250px);
+}
+/* HEADER */
+
+
+/* RIGHT SIDE */
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+
+/* NOTIFICATION */
+.notif{
+  position:relative;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.notif-badge{
+  position:absolute;
+  top:-5px;
+  right:-10px;
+  background:red;
+  color:white;
+  font-size:10px;
+  padding:2px 6px;
+  border-radius:50%;
+}
+
+/* USER */
+.user-info{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  cursor:pointer;
+}
+
+.user-info img{
+  width:35px;
+  height:35px;
+  border-radius:50%;
+}
+
+.username{
+  font-size:14px;
+}
+
+/* DROPDOWN */
+.user-dropdown{
+  position:relative;
+}
+
+.dropdown-menu{
+  display:none;
+  position:absolute;
+  right:0;
+  top:45px;
+  background:white;
+  color:black;
+  border-radius:8px;
+  overflow:hidden;
+  min-width:150px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.dropdown-menu a{
+  display:block;
+  padding:10px;
+  text-decoration:none;
+  color:black;
+}
+
+.dropdown-menu a:hover{
+  background:#f0f0f0;
+}
+
+/* SHOW */
+.dropdown-menu.show{
+  display:block;
+}
+
+/* MENU BUTTON */
+.menu-btn{
+  font-size:22px;
+  cursor:pointer;
+
+}
+
+.profile img{
+  width:35px;
+  height:35px;
+  border-radius:50%;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:250px;
+  height:100vh;
+  position:fixed;
+  background:#454a55;
+  padding:20px ;
+  left:-250px;
+  top:0;
+  transition:0.3s;
+}
+
+.sidebar.active{
+  left:0;
+}
+
+/* ✅ FIXED LOGO SIZE */
+.sidebar .logo-center img{
+  width:70px !important;
+  height:auto;
+}
+
+/* LOGO ALIGN */
+.logo-center{
+  text-align:center;
+  margin-bottom:10px;
+}
+.logo-center img{
+    max-width: 200px;
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: auto;
+}
+
+/* PROFILE */
+.profile{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+/* MENU */
+.menu a{
+  display:block;
+  padding:12px;
+  margin-bottom:10px;
+  text-decoration:none;
+  color:white;
+  border-radius:8px;
+}
+
+.menu a:hover{
+  background:#194d47;
+}
+
+/* MAIN */
+.main{
+  margin-left:0;
+  transition:0.3s;
+}
+
+.main.shift{
+  margin-left:250px;
+}
+
+/* BOX */
+.box{
+  background:white;
+  padding:20px;
+  border-radius:15px;
+  width: 100%;
+  max-width: 100%;
+  overflow-x:auto
+}
+
+/* TABLE */
+table{
+  font-size:12px;
+  width:100%;
+  
+  border-collapse:collapse;
+  table-layout:auto;
+}
+
+th, td{
+  padding:6px;
+  text-align:left;
+  word-wrap:break-word;
+}
+
+td{
+  max-width:150px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* COLORS */
+.schedule-ok{
+  color:green;
+  font-weight:bold;
+}
+
+.schedule-none{
+  color:rgb(7, 6, 6);
+}
+/* ===== APPLY SA LAHAT NG TABLE ===== */
+
+/* remove grid */
+th, td{
+  border:none;
+}
+td:nth-child(1){
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+}
+
+/* alternate */
+table tr:nth-child(even){
+  background:#caf7c4;
+}
+
+table tr:nth-child(odd){
+  background:rgb(252, 247, 247);
+}
+
+/* hover */
+table tr{
+  transition:0.2s ease;
+  position:relative;
+}
+
+table tr:hover{
+  background:#e8f8f6;
+  transform:scale(1.02);
+  box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
+
+/* left bar */
+table tr::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  height:100%;
+  width:4px;
+  background:transparent;
+  transition:0.2s;
+}
+
+table tr:hover::before{
+  background:#16a395;
+}
+table tr{
+    display:table-row;
+}
+
+
+
+
+/* BUTTONS */
+button{
+  padding:5px 10px;
+  font-size:11px;
+  background:#16a395;
+  color:white;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#138a7e;
+}
+
+a{
+  color:#292222;
+  text-decoration:none;
+  
+}
+input{
+    width: 100%;
+    max-width: 140px;
+    box-sizing: border-box;
+}
+.custom-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+}
+
+/* remove bootstrap grid totally */
+.custom-table th,
+.custom-table td{
+  border:none !important;
+  padding:6px;
+}
+
+/* SAME STYLE SA DOCTOR */
+.custom-table tr:nth-child(even){
+  background:#caf7c4;
+}
+
+.custom-table tr:nth-child(odd){
+  background:#fcf7f7;
+}
+
+.custom-table tr{
+  transition:0.2s;
+  position:relative;
+}
+
+.custom-table tr:hover{
+  background:#e8f8f6;
+  transform:scale(1.02);
+  box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
+
+.custom-table tr::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  height:100%;
+  width:4px;
+  background:transparent;
+  transition:0.2s;
+}
+
+.custom-table tr:hover::before{
+  background:#16a395;
+}
+/* 🔥 GLASS EFFECT */
+.box{
+  background:rgba(255,255,255,0.7);
+  backdrop-filter:blur(10px);
+  border-radius:15px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+/* 🔥 TABLE HEADER STICKY */
+.custom-table thead th{
+  position:sticky;
+  top:0;
+  background:#16a395;
+  color:white;
+  z-index:2;
+}
+
+/* 🔥 SMOOTH HOVER */
+.custom-table tr{
+  transition:all 0.25s ease;
+}
+
+.custom-table tr:hover{
+  transform:scale(1.01);
+  background:#e8f8f6;
+}
+
+/* 🔥 INPUT DESIGN */
+#searchInput{
+  outline:none;
+  transition:0.2s;
+}
+
+#searchInput:focus{
+  border:1px solid #16a395;
+  box-shadow:0 0 5px rgba(22,163,149,0.4);
+}
+.box{
+  position:relative; /* importante */
+}
+
+/* LOGO SA LOOB NG BOX */
+.box-logo{
+  position:absolute;
+  top:10px;
+  left:50%;
+  transform:translateX(-50%);
+  pointer-events:none; /* para di maka-block click */
+}
+
+
+.box-logo img{
+   max-width: 150px;
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: auto;
+}
+/* FORM CARD */
+.form-card{
+  max-width:500px;
+  margin:40px auto;
+  padding:25px;
+  background:#fff;
+  border-radius:15px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+#formbox{
+  max-width: 400px;
+  margin: auto;
+}
+#formbox input{
+  width: 100%;
+}
+
+/* ANIMATION */
+.fade-in{
+  animation: fadeIn 0.8s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform: translateY(20px);}
+  to{opacity:1; transform: translateY(0);}
+}
